@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bem-vindo ao DownCrazy</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> <!-- Link para o CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <header>
@@ -17,15 +17,15 @@
         <section id="outros">
             <h2 class="centralizado">Nossos Serviços</h2>
             <div class="service-buttons">
-                <button onclick="location.href='bin.html'"><b>Consultar BIN</b></button>
+                <button onclick="location.href='{{ url_for('consultar_bin') }}'"><b>Consultar BIN</b></button>
                 <button onclick="consultar('CPF')"><b>Consultar CPF</b></button>
                 <button onclick="consultar('Nome')"><b>Consultar Nome</b></button>
-                <button onclick="location.href='ip.html'"><b>Consultar IP</b></button>
+                <button onclick="location.href='{{ url_for('consultar_ip') }}'"><b>Consultar IP</b></button>
             </div>
             <p class="download-text">👇🏼 <b>Baixe músicas do YouTube</b> 👇🏼</p>
-            <div class="download-box"> <!-- Nova caixa para o botão de download -->
+            <div class="download-box">
                 <button onclick="location.href='youtube.html'"><b>Baixar Músicas</b></button>
-                <button class="help-button" onclick="alert('Ajudar o Canal!')"><b>Ajudar o Canal</b></button> <!-- Botão Ajudar o Canal -->
+                <button class="help-button" onclick="alert('Ajudar o Canal!')"><b>Ajudar o Canal</b></button>
             </div>
         </section>
     </main>
@@ -35,7 +35,6 @@
     </footer>
 
     <script>
-        // Função para simular a consulta
         function consultar(tipo) {
             alert('Você selecionou: ' + tipo);
         }
