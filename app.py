@@ -27,22 +27,22 @@ def login():
     else:
         return "Usuário ou senha inválidos!"
 
+@app.route('/bin')
+def bin_page():
+    return render_template('bin.html', message=None)  # Retorna a página bin.html
+
 @app.route('/check_bin', methods=['POST'])
 def check_bin():
     bin_number = request.form['bin']  # Aqui você obtém o número do BIN do formulário
-    # Lógica para verificar o BIN deve ser implementada aqui
-    return render_template('bin.html', message=f"Verificando BIN: {bin_number}")
-
-@app.route('/bin')
-def bin_page():    
-    return render_template('bin.html')  # Retorna a página bin.html
+    from bin import verificar_bin  # Importa a função de verificação do arquivo bin.py
+    return verificar_bin(bin_number)  # Chama a função para verificar o BIN
 
 @app.route('/ip')
-def consultar_ip():    
+def consultar_ip():
     return render_template('ip.html')  # Retorna a página ip.html
 
 @app.route('/youtube')
-def consultar_youtube():    
+def consultar_youtube():
     return render_template('youtube.html')  # Retorna a página youtube.html
 
 @app.route('/main')
@@ -56,6 +56,6 @@ def logout():
     session.pop('logged_in', None)  # Remove a sessão
     return redirect(url_for('home'))  # Redireciona para a página de login
 
-if __name__ == '__main__':    
+if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))  # Usa a variável de ambiente PORT ou 5000 como padrão    
     app.run(host='0.0.0.0', port=port)  # Escuta em 0.0.0.0 na porta especificada
