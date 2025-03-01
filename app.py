@@ -38,8 +38,15 @@ def check_bin():
     return verificar_bin(bin_number)  # Chama a função para verificar o BIN
 
 @app.route('/ip')
-def consultar_ip():
-    return render_template('ip.html')  # Retorna a página ip.html
+def ip_page():
+    return render_template('ip.html', message=None)  # Retorna a página ip.html
+
+@app.route('/check_ip', methods=['POST'])
+def check_ip():
+    ip_address = request.form.get('ip')  # Obtém o IP do formulário
+    from ip import buscar_informacoes_ip  # Importa a função de verificação do arquivo ip.py
+    resultado = buscar_informacoes_ip(ip_address, is_dono=False, is_vip=True)  # Chama a função para verificar o IP
+    return render_template('ip.html', message=resultado)  # Retorna para a página com a mensagem
 
 @app.route('/youtube')
 def consultar_youtube():
