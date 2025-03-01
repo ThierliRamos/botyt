@@ -37,5 +37,6 @@ def logout():
     session.pop('logged_in', None)  # Remove a sessão
     return redirect(url_for('home'))  # Redireciona para a página de login
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == '__main__':    
+    port = int(os.environ.get("PORT", 5000))  # Usa a variável de ambiente PORT ou 5000 como padrão    
+    app.run(host='0.0.0.0', port=port)  # Escuta em 0.0.0.0 na porta especificada
