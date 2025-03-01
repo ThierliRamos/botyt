@@ -27,8 +27,13 @@ def login():
     else:
         return "Usuário ou senha inválidos!"
 
+@app.route('/check_bin', methods=['POST'])
+def check_bin():
+    # Lógica para verificar BIN
+    ...
+
 @app.route('/bin')
-def check_bin():    
+def consultar_bin():    
     return render_template('bin.html')  # Retorna a página bin.html
 
 @app.route('/ip')
