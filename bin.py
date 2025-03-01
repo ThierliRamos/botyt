@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('bin.html', message=None)  # Página inicial
+    return render_template('bin', message=None)  # Página inicial
 
 @app.route('/check_bin', methods=['POST'])
 def check_bin():
