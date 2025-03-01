@@ -33,7 +33,7 @@ def check_bin():
     ...
 
 @app.route('/bin')
-def consultar_bin():    
+def check_bin():    
     return render_template('bin.html')  # Retorna a página bin.html
 
 @app.route('/ip')
