@@ -31,7 +31,7 @@ app.post('/login', (req, res) => {
         }
 
         if (autenticado) {
-            res.redirect('/templates/main.html'); // Redirecionar para a página de sucesso
+            res.redirect('main.html'); // Redirecionar para a página de sucesso
         } else {
             res.status(401).send('Usuário ou senha incorretos.');
         }
@@ -44,13 +44,13 @@ app.get('/index.html', (req, res) => {
 });
 
 // Rota para a página principal
-app.get('/templates/main.html', (req, res) => {
-    res.sendFile(__dirname + '/templates/main.html');
+app.get('main.html', (req, res) => {
+    res.sendFile(__dirname + 'main.html');
 });
 
 // Rota para a página de sucesso
-app.get('/templates/main.html', (req, res) => {
-    res.sendFile(__dirname + '/templates/main.html');
+app.get('main.html', (req, res) => {
+    res.sendFile(__dirname + 'main.html');
 });
 
 // Iniciar o servidor
