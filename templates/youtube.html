@@ -13,6 +13,7 @@
             margin: 0;
             background-color: #f4f4f4;
             font-family: Arial, sans-serif;
+            flex-direction: column; /* Altera a direção do layout para coluna */
         }
         .container {
             background-color: white;
@@ -60,9 +61,24 @@
             margin-top: 10px;
             color: #007bff; /* Azul para a mensagem de carregamento */
         }
+        .back-button {
+            background-color: #28a745; /* Cor verde */
+            color: white;            
+            padding: 10px 20px;            
+            border-radius: 5px;            
+            text-decoration: none; /* Remove sublinhado do link */            
+            font-size: 16px;            
+            margin-bottom: 20px; /* Espaçamento abaixo do botão */            
+            transition: background-color 0.3s;        
+            text-align: center; /* Centraliza o texto */
+        }        
+        .back-button:hover {            
+            background-color: #218838; /* Cor ao passar o mouse */        
+        }
     </style>
 </head>
 <body>
+    <a href="/templates/main.html" class="back-button">Voltar para o Início</a> <!-- Botão estilizado -->
     <div class="container">
         <h1>Baixar Músicas do YouTube</h1>
         <p>Baixe o Áudio de qualquer vídeo do YouTube.</p>
