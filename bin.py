@@ -6,18 +6,19 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('bin', message=None)  # Página inicial
+    return render_template('bin.html', message=None)  # Página inicial
 
 @app.route('/check_bin', methods=['POST'])
 def check_bin():
     bin_number = request.form['bin']
-    is_dono = True  # Aqui você pode definir a lógica para verificar se o usuário é o dono
-    is_vip = False  # Aqui você pode definir a lógica para verificar se o usuário é VIP
+    # Define a lógica para verificar se o usuário é o dono ou VIP
+    is_dono = True  
+    is_vip = False  
 
     pode_usar = is_dono or is_vip
 
     if not pode_usar:
-        return render_template('/bin', message="🔐 Apenas pessoas autorizadas podem usar!")
+        return render_template('bin.html', message="🔐 Apenas pessoas autorizadas podem usar!")
 
     try:
         headers = {
@@ -45,13 +46,13 @@ def check_bin():
                 f"<div>💰 <strong>Moeda:</strong> {data['BIN']['country']['currency']}</div>"
                 f"<div>🏠 <strong>Capital:</strong> {data['BIN']['country']['capital']}</div>"
             )
-            return render_template('/bin', message=result)  # Retorna para a página com a mensagem
+            return render_template('bin.html', message=result)  # Retorna para a página com a mensagem
         else:
-            return render_template('/bin', message="BIN não encontrada!")
+            return render_template('bin.html', message="BIN não encontrada!")
 
     except Exception as e:
         print(e)
-        return render_template('/bin', message="Erro ao buscar BIN!")
+        return render_template('bin.html', message="Erro ao buscar BIN!")
 
 if __name__ == '__main__':
-       app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000))) # type: ignore
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
