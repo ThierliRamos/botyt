@@ -20,6 +20,11 @@ def buscar_informacoes_ip(ip_address, is_dono, is_vip):
         print(f"Consultando: {url}")
 
         response = requests.get(url, headers=headers)
+
+        # Verifica se a resposta da API foi bem-sucedida
+        if response.status_code != 200:
+            return f"Erro na API: {response.status_code} - {response.text}"
+
         data = response.json()
 
         if data:
@@ -32,6 +37,8 @@ def buscar_informacoes_ip(ip_address, is_dono, is_vip):
                     f"<div><strong>Latitude:</strong> {data['location']['latitude']}</div>"
                     f"<div><strong>Longitude:</strong> {data['location']['longitude']}</div>"
                     f"<div><strong>Fuso Horário:</strong> {data['time']['timezone']}</div>")
+        else:
+            return "Nenhum dado encontrado para este IP."
     except Exception as error:
-        print(error)
+        print(f"Erro: {error}")
         return "Erro ao buscar informações!"
