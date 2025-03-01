@@ -1,10 +1,12 @@
-from flask import render_template
+from flask import Flask, request, render_template
 import requests
 import time
 
+app = Flask(__name__)
+
 def buscar_informacoes_ip(ip_address, is_dono, is_vip):
     try:
-        # Determina se o usuário pode usar o comando
+        # Verifica se o usuário pode usar o comando
         pode_usar = is_dono or is_vip
         if not pode_usar:
             return "🔐 Apenas pessoas autorizadas podem usar!"
@@ -40,9 +42,19 @@ def buscar_informacoes_ip(ip_address, is_dono, is_vip):
                     f"<div><strong>Fuso Horário:</strong> {data['time']['timezone']}</div>")
         else:
             return "Nenhum dado encontrado para este IP."
-    except requests.exceptions.RequestException as req_error:
-        print(f"Erro de requisição: {req_error}")
-        return "Erro ao buscar informações! Verifique a conexão com a API."
     except Exception as error:
         print(f"Erro inesperado: {error}")
         return "Erro ao buscar informações!"
+
+@app.route('/check_ip', methods=['POST'])
+def check_ip():
+    ip_address = request.form.get('ip')
+    resultado = buscar_informacoes_ip(ip_address, is_dono=False, is_vip=True)
+    return render_template('ip.html', message=resultado)
+
+@app.route('/')
+def ip():
+    return render_template('ip.html', message=None)
+
+if __name__ == '__main__':
+    app.run(debug=True)
