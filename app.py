@@ -27,6 +27,20 @@ def login():
     else:
         return "Usuário ou senha inválidos!"
 
+@app.route('/bin')
+def consultar_bin():    
+    return render_template('bin.html')  # Retorna a página bin.html
+
+@app.route('/ip')
+def consultar_ip():    
+    return render_template('ip.html')  # Retorna a página bin.html
+
+@app.route('/youtube')
+def consultar_youtube():    
+    return render_template('youtube.html')  # Retorna a página bin.html
+
+
+
 @app.route('/main')
 def main():
     if not session.get('logged_in'):
