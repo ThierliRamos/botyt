@@ -11,9 +11,8 @@ def home():
 @app.route('/check_bin', methods=['POST'])
 def check_bin():
     bin_number = request.form['bin']
-    # Define a lógica para verificar se o usuário é o dono ou VIP
-    is_dono = True  
-    is_vip = False  
+    is_dono = True  # Aqui você pode definir a lógica para verificar se o usuário é o dono
+    is_vip = False  # Aqui você pode definir a lógica para verificar se o usuário é VIP
 
     pode_usar = is_dono or is_vip
 
