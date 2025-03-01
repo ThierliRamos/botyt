@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+import os
 
 app = Flask(__name__)
 app.secret_key = 'uma_chave_secreta'  # Necessário para gerenciar sessões
