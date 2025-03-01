@@ -43,11 +43,11 @@ def buscar_informacoes_ip(args, is_dono, is_vip):
 def check_ip():
     ip_address = request.form.get('ip')
     resultado = buscar_informacoes_ip(ip_address, is_dono=False, is_vip=True)
-    return render_template('ip.html', message=resultado)
+    return render_template('/ip', message=resultado)
 
 @app.route('/')
 def ip():
-    return render_template('ip.html', message=None)
+    return render_template('/ip', message=None)
 
 if __name__ == '__main__':
     app.run(debug=True)
