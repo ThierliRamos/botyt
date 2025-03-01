@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baixar Outros Serviços</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link para o CSS -->
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Downloader de Músicas</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/templates/main.html">Início</a></li> <!-- Link para a página inicial -->
+                <li><a href="baixar_outros.html">Baixar Outros</a></li>
+                <li><a href="#ajuda">Ajudar o Canal</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="outros">
+            <h2>Consultar Outros Serviços</h2>
+            <div class="service-buttons">
+                <button onclick="consultar('BIN')">Consultar BIN</button>
+                <button onclick="consultar('CPF')">Consultar CPF</button>
+                <button onclick="consultar('Nome')">Consultar Nome</button>
+                <button onclick="consultar('RG')">Consultar RG</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Downloader de Músicas. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // Função para simular a consulta
+        function consultar(tipo) {
+            alert('Você selecionou: ' + tipo);
+        }
+    </script>
+</body>
+</html>

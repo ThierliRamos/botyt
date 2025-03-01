@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download de Músicas do YouTube</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background-color: white;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .message {
+            margin: 15px 0;
+            color: #333;
+            font-weight: bold;
+            text-align: left; /* Para alinhar à esquerda */
+        }
+        #loading-message {
+            display: none;
+            margin-top: 10px;
+            color: #007bff; /* Azul para a mensagem de carregamento */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Baixar Músicas do YouTube</h1>
+        <p>Baixe o Áudio de qualquer vídeo do YouTube.</p>
+        <form action="/download" method="post" onsubmit="showLoadingMessage()">
+            <input type="text" name="url" placeholder="Cole o link do YouTube aqui" required>
+            <button type="submit">Baixar</button>
+        </form>
+        <div id="loading-message">Baixando Música, Aguarde...</div> <!-- Mensagem de carregamento -->
+        {% if message %}
+            <div class="message">{{ message|safe }}</div>  <!-- Exibe a mensagem -->
+        {% endif %}
+    </div>
+
+    <script>
+        function showLoadingMessage() {
+            document.getElementById('loading-message').style.display = 'block'; // Exibe a mensagem de carregamento
+        }
+    </script>
+</body>
+</html>
