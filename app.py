@@ -29,22 +29,21 @@ def login():
 
 @app.route('/check_bin', methods=['POST'])
 def check_bin():
-    # Lógica para verificar BIN
-    ...
+    bin_number = request.form['bin']  # Aqui você obtém o número do BIN do formulário
+    # Lógica para verificar o BIN deve ser implementada aqui
+    return render_template('bin.html', message=f"Verificando BIN: {bin_number}")
 
 @app.route('/bin')
-def check_bin():    
+def bin_page():    
     return render_template('bin.html')  # Retorna a página bin.html
 
 @app.route('/ip')
 def consultar_ip():    
-    return render_template('ip.html')  # Retorna a página bin.html
+    return render_template('ip.html')  # Retorna a página ip.html
 
 @app.route('/youtube')
 def consultar_youtube():    
-    return render_template('youtube.html')  # Retorna a página bin.html
-
-
+    return render_template('youtube.html')  # Retorna a página youtube.html
 
 @app.route('/main')
 def main():
