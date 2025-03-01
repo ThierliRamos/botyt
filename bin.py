@@ -51,7 +51,7 @@ def check_bin():
             return render_template('bin.html', message="BIN não encontrada!")
 
     except Exception as e:
-        print(e)
+        print(f"Erro ao processar a solicitação: {e}")
         return render_template('bin.html', message="Erro ao buscar BIN!")
 
 if __name__ == '__main__':
