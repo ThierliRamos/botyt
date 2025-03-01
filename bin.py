@@ -11,8 +11,8 @@ def home():
 @app.route('/check_bin', methods=['POST'])
 def check_bin():
     bin_number = request.form['bin']
-    is_dono = True  # Aqui você pode definir a lógica para verificar se o usuário é o dono
-    is_vip = False  # Aqui você pode definir a lógica para verificar se o usuário é VIP
+    is_dono = True  # Defina a lógica para verificar se o usuário é o dono
+    is_vip = False  # Defina a lógica para verificar se o usuário é VIP
 
     pode_usar = is_dono or is_vip
 
@@ -32,7 +32,14 @@ def check_bin():
             json={"bin": bin_number}
         )
 
+        # Verifique o código de status da resposta
+        if response.status_code != 200:
+            return render_template('bin.html', message=f"Erro na API: {response.status_code} - {response.text}")
+
         data = response.json()
+
+        # Debug: Imprima a resposta da API
+        print("Resposta da API:", data)
 
         if 'BIN' in data:
             result = (
