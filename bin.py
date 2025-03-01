@@ -1,18 +1,9 @@
-from flask import Flask, render_template, request
+from flask import render_template
 import requests
-import os
 
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return render_template('bin.html', message=None)  # Página inicial
-
-@app.route('/check_bin', methods=['POST'])
-def check_bin():
-    bin_number = request.form['bin']
-    is_dono = True  # Defina a lógica para verificar se o usuário é o dono
-    is_vip = False  # Defina a lógica para verificar se o usuário é VIP
+def verificar_bin(bin_number):
+    is_dono = True  # Aqui você pode definir a lógica para verificar se o usuário é o dono
+    is_vip = False  # Aqui você pode definir a lógica para verificar se o usuário é VIP
 
     pode_usar = is_dono or is_vip
 
@@ -32,9 +23,8 @@ def check_bin():
             json={"bin": bin_number}
         )
 
-        # Verifique o código de status da resposta
         if response.status_code != 200:
-            return render_template('bin.html', message=f"Erro na API: {response.status_code} - {response.text}")
+            return render_template('bin.html', message="Erro na API: " + str(response.status_code))
 
         data = response.json()
 
@@ -59,6 +49,3 @@ def check_bin():
     except Exception as e:
         print(f"Erro ao processar a solicitação: {e}")
         return render_template('bin.html', message="Erro ao buscar BIN!")
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
