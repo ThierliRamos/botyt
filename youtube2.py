@@ -1,8 +1,7 @@
-from flask import Blueprint, request, jsonify, render_template, send_file
+from flask import Blueprint, request, jsonify, render_template
 import yt_dlp
 import os
 from threading import Thread
-import time
 from urllib.parse import urlparse, parse_qs
 
 # Criação da Blueprint
@@ -21,10 +20,14 @@ def download_video(url, output_file, format):
         elif d['status'] == 'finished':
             download_progress = 100
 
+    # Caminho fixo para o arquivo de cookies
+    cookies_file = 'cookies/cookies'
+
     options = {
         'format': format,
         'outtmpl': output_file,
         'progress_hooks': [progress_hook],
+        'cookiefile': 'cookies/cookies.txt',  # Verifique se este caminho está correto
     }
 
     try:
