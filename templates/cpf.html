@@ -90,7 +90,7 @@
             event.preventDefault(); // Previne o envio padrão do formulário
             const cpf = $('#cpf').val();
             $('#result').html("🔎 Aguarde... Estou buscando!");
-            $.post('/cpf2', { cpf: cpf }, function(data) {
+            $.post('/consultar_cpf', { cpf: cpf }, function(data) {
                 if (data.status === 'success') {
                     // Dividir a string retornada em linhas separadas
                     const resultadoArray = data.data.split('\n');
@@ -100,7 +100,9 @@
                     $('#result').html(data.message);
                 }
             }).fail(function(xhr) {
-                $('#result').html(xhr.responseJSON.message || '❌ Ocorreu um erro.');
+                // Verifica se xhr.responseJSON está definido
+                const errorMessage = xhr.responseJSON ? xhr.responseJSON.message : '❌ Ocorreu um erro desconhecido.';
+                $('#result').html(errorMessage);
             });
         });
     });
