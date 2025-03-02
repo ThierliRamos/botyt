@@ -5,7 +5,6 @@ from threading import Thread
 
 app = Flask(__name__)
 
-# Variável global para armazenar o progresso do download
 download_progress = 0
 
 def download_audio(url):
@@ -19,27 +18,29 @@ def download_audio(url):
         elif d['status'] == 'finished':
             download_progress = 100
 
-    # Define o caminho para a pasta Downloads do usuário
     downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
 
     options = {
-        'format': 'bestaudio/best',  # Seleciona o melhor formato de áudio disponível
-        'extractaudio': True,         # Extrai somente o áudio do vídeo
-        'audioformat': 'mp3',         # Formato do áudio
-        'outtmpl': os.path.join(downloads_path, '%(title)s.%(ext)s'),  # Salva na pasta Downloads
+        'format': 'bestaudio/best',
+        'extractaudio': True,
+        'audioformat': 'mp3',
+        'outtmpl': os.path.join(downloads_path, '%(title)s.%(ext)s'),
         'progress_hooks': [progress_hook],
     }
-    
+
     with yt_dlp.YoutubeDL(options) as ydl:
         ydl.download([url])
 
 @app.route('/')
 def index():
-    return render_template('youtube.html')  # Serve a página HTML
+    return render_template('youtube.html')
 
-@app.route('/download', methods=['POST'])
-def download():
+@app.route('/download_audio', methods=['POST'])
+def download_audio_route():
     url = request.form['url']
+    # Validação da URL
+    if "youtube.com" not in url and "youtu.be" not in url:
+        return jsonify({'status': 'error', 'message': 'URL inválida!'}), 400
     thread = Thread(target=download_audio, args=(url,))
     thread.start()
     return jsonify({'status': 'success'})
@@ -49,5 +50,4 @@ def progress():
     return jsonify({'progress': download_progress})
 
 if __name__ == '__main__':
-    # Execute o servidor Flask
     app.run(debug=True)
