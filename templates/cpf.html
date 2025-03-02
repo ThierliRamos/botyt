@@ -73,7 +73,7 @@
 </head>
 <body>
 
-<a href="/" class="back-button">Voltar para o Início</a> <!-- Botão estilizado -->
+<button onclick="location.href='{{ url_for('main') }}'">Voltar para o Início</button> <!-- Botão de Voltar -->
 <div class="container">
     <h1>Consulta CPF</h1>
     <form id="cpfForm" action="/consultar_cpf" method="post"> <!-- Ação do formulário -->
