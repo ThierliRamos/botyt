@@ -20,8 +20,8 @@ def download_video(url, output_file, format):
         elif d['status'] == 'finished':
             download_progress = 100
 
-       # Certifique-se de que este caminho está correto
-   cookies_file_path = 'cookies/cookies.txt' 
+          # Certifique-se de que este caminho está correto
+   cookies_file_path = os.path.join(os.getcwd(), 'cookies', 'cookies.txt')
 
        if not os.path.exists(cookies_file_path):
        print(f"Arquivo de cookies não encontrado em: {cookies_file_path}")
@@ -32,7 +32,6 @@ def download_video(url, output_file, format):
         'format': format,
         'outtmpl': output_file,
         'progress_hooks': [progress_hook],
-        'cookiefile': cookies_file_path,  # Use esta linha para especificar o arquivo de cookies
         'cookies_from_browser': True,  # Adicione esta linha se você estiver usando cookies do navegador
     }
 
