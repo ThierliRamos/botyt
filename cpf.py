@@ -5,7 +5,7 @@ import re
 app = Flask(__name__)
 
 @app.route('/')
-def index():
+def cpf2():
     return render_template('cpf.html')
 
 @app.route('/cpf2', methods=['POST'])
