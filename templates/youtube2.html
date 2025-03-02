@@ -7,6 +7,7 @@
     <style>
         body {
             display: flex;
+            flex-direction: column; /* Permite que os elementos sejam empilhados verticalmente */
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -22,6 +23,7 @@
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
             text-align: center;
             width: 300px;
+            margin-bottom: 20px; /* Espaço abaixo da caixa */
         }
         h1 {
             font-size: 24px;
@@ -84,8 +86,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            padding: 10px;
-            width: 100%;
+            padding: 10px 20px; /* Ajuste o padding para maior conforto */
             margin-bottom: 20px; /* Espaço abaixo do botão */
             text-decoration: none; /* Remove o sublinhado */
             display: inline-block; /* Permite que o botão seja um bloco */
@@ -96,8 +97,8 @@
     </style>
 </head>
 <body>
+    <a href="/main" class="back-button">Voltar para o Início</a> <!-- Botão de voltar no topo -->
     <div class="container">
-        <a href="/main" class="back-button">Voltar para o Início</a> <!-- Botão de voltar no topo -->
         <h1>Baixar Vídeos do YouTube</h1>
         <p>Baixe qualquer vídeo do YouTube.</p>
         <form id="download-form" action="/youtube2/download_video" method="post" onsubmit="startDownload(event)">
