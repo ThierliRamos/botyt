@@ -26,7 +26,7 @@ def download_audio(url, output_file):
         'extractaudio': True,
         'audioformat': 'mp3',
         'outtmpl': output_file,
-        'cookiefile': '/opt/render/project/src/cookies/cookies.txt',  # Verifique se este caminho está correto
+        'cookiefile': 'cookies/cookies.txt',  # Verifique se este caminho está correto
         'progress_hooks': [progress_hook],
     }
 
