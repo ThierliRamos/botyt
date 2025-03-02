@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import os
+from bin import verificar_bin  # Importa no início
+from ip import buscar_informacoes_ip  # Importa no início
 
 app = Flask(__name__)
 app.secret_key = 'uma_chave_secreta'  # Necessário para gerenciar sessões
@@ -34,7 +36,6 @@ def bin_page():
 @app.route('/check_bin', methods=['POST'])
 def check_bin():
     bin_number = request.form['bin']  # Aqui você obtém o número do BIN do formulário
-    from bin import verificar_bin  # Importa a função de verificação do arquivo bin.py
     return verificar_bin(bin_number)  # Chama a função para verificar o BIN
 
 @app.route('/ip')
@@ -44,13 +45,16 @@ def ip_page():
 @app.route('/check_ip', methods=['POST'])
 def check_ip():
     ip_address = request.form.get('ip')  # Obtém o IP do formulário
-    from ip import buscar_informacoes_ip  # Importa a função de verificação do arquivo ip.py
     resultado = buscar_informacoes_ip(ip_address, is_dono=False, is_vip=True)  # Chama a função para verificar o IP
     return render_template('ip.html', message=resultado)  # Retorna para a página com a mensagem
 
 @app.route('/youtube')
 def consultar_youtube():
     return render_template('youtube.html')  # Retorna a página youtube.html
+
+@app.route('/youtube2')
+def consul_youtube2():
+    return render_template('youtube2.html')  # Retorna a página youtube2.html
 
 @app.route('/main')
 def main():
