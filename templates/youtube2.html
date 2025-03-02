@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download de Músicas do YouTube</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background-color: white;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .message {
+            margin: 15px 0;
+            color: #333;
+            font-weight: bold;
+            text-align: left;
+        }
+        #progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: none; /* Inicialmente escondido */
+            overflow: hidden; /* Para garantir que nada que ultrapasse seja escondido */
+            position: relative; /* Para posicionar a porcentagem */
+        }
+        #progress-bar {
+            height: 20px;
+            width: 0;
+            background-color: #28a745;
+            border-radius: 5px;
+            transition: width 0.1s; /* Transição suave */
+        }
+        #progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            line-height: 20px; /* Alinha verticalmente com a barra */
+            color: white; /* Cor do texto */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Baixar Vídeos do YouTube</h1>
+        <p>Baixe qualquer vídeo do YouTube.</p>
+        <form id="download-form" action="/download" method="post" onsubmit="startDownload(event)">
+            <input type="text" id="url" name="url" placeholder="Cole o link do YouTube aqui" required>
+            <button type="submit">Baixar</button>
+        </form>
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+            <div id="progress-text">0%</div> <!-- Elemento para mostrar a porcentagem -->
+        </div>
+        <div id="status-message" class="message"></div>
+    </div>
+
+    <script>
+        function startDownload(event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
+            const url = document.getElementById('url').value;
+            const statusMessage = document.getElementById('status-message');
+            const progressContainer = document.getElementById('progress-container');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+
+            statusMessage.innerText = "Iniciando download...";
+            progressContainer.style.display = 'block'; // Mostra a barra de progresso
+
+            fetch('/download', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({ url: url })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    checkProgress(); // Chama a função para verificar o progresso
+                } else {
+                    statusMessage.innerText = data.message; // Exibe a mensagem de erro
+                    progressContainer.style.display = 'none'; // Esconde a barra de progresso
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                statusMessage.innerText = 'Erro ao iniciar o download.';
+                progressContainer.style.display = 'none'; // Esconde a barra de progresso
+            });
+        }
+
+        function checkProgress() {
+            const progressContainer = document.getElementById('progress-container');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const statusMessage = document.getElementById('status-message');
+
+            fetch('/progress')
+            .then(response => response.json())
+            .then(data => {
+                const progress = data.progress;
+                progressBar.style.width = progress + '%'; // Atualiza a largura da barra de progresso
+                progressText.innerText = Math.round(progress) + '%'; // Atualiza o texto da porcentagem
+
+                if (progress < 100) {
+                    setTimeout(checkProgress, 1000); // Verifica o progresso novamente após 1 segundo
+                } else {
+                    statusMessage.innerText = "Download concluído!";
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                statusMessage.innerText = 'Erro ao verificar progresso.';
+            });
+        }
+    </script>
+</body>
+</html>
