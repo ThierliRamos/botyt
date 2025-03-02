@@ -80,11 +80,10 @@ def consultar_cpf():
                 f"Data de Nascimento: {resultados['data_nascimento']}"
             )
             return jsonify({'status': 'success', 'data': resultado_mensagem}), 200
-
-        except Exception as e:
+            except Exception as e:
+            print(f"Erro ao consultar CPF: {e}")  # Adicione esta linha para ver o erro no log
             return jsonify({'status': 'error', 'message': '❌ Ocorreu um erro ao consultar o CPF.'}), 500
-
-    return render_template('cpf.html')  # Para GET, renderiza a página
+            return render_template('cpf.html')
 
 @app.route('/youtube')
 def consultar_youtube():
