@@ -21,17 +21,17 @@ def download_audio(url, output_file):
             download_progress = 100
 
     options = {
-    'format': 'bestaudio/best',
-    'extractaudio': True,
-    'audioformat': 'mp3',
-    'outtmpl': output_file,
-    'cookiesfrombrowser': True,  # Adicione esta linha se você estiver usando um navegador compatível
-    'progress_hooks': [progress_hook],
-    'verbose': True,  # Habilita logs detalhados
-}
+        'format': 'bestaudio/best',
+        'extractaudio': True,
+        'audioformat': 'mp3',
+        'outtmpl': output_file,
+        'cookiefile': '/opt/render/project/src/cookies/cookies.txt',  # Novo caminho
+        'progress_hooks': [progress_hook],
+    }
 
     with yt_dlp.YoutubeDL(options) as ydl:
         ydl.download([url])
+
 
 @youtube_app.route('/')
 def index():
