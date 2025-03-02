@@ -63,11 +63,11 @@
     </style>
 </head>
 <body>
-    <a href="/main" class="back-button">Voltar para o Início</a> <!-- Botão estilizado -->
+    <a href="/main" class="back-button">Voltar para o Início</a>
     <div class="container">
         <h1>Baixar Músicas do YouTube</h1>
         <p>Baixe o Áudio de qualquer vídeo do YouTube.</p>
-        <form action="/download" method="post" onsubmit="showLoadingMessage()">
+        <form action="/download_audio" method="post" onsubmit="showLoadingMessage()">
             <input type="text" name="url" placeholder="Cole o link do YouTube aqui" required>
             <button type="submit">Baixar</button>
         </form>
