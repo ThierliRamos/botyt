@@ -45,6 +45,9 @@ def download_video_route():
     url = request.form['url']
     format = request.form['format']  # Obtém o formato enviado pelo formulário
 
+    print(f"URL recebida: {url}")
+    print(f"Formato recebido: {format}")
+
     # Validação da URL
     if "youtube.com" not in url and "youtu.be" not in url:
         return jsonify({'status': 'error', 'message': 'URL inválida!'}), 400
