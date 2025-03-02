@@ -10,3 +10,13 @@
 .youtube.com	TRUE	/	TRUE	1756173488	VISITOR_PRIVACY_METADATA	CgJCUhIEGgAgQA%3D%3D
 .youtube.com	TRUE	/	TRUE	1803693488	__Secure-YT_TVFAS	t=483505&s=2
 .youtube.com	TRUE	/	TRUE	1756173488	DEVICE_INFO	ChxOelEzTlRreE1qTTJOekExT0RJek56azJNdz09ELCN/70GGLCN/70G
+
+
+options = {
+    'format': 'bestaudio/best',
+    'extractaudio': True,
+    'audioformat': 'mp3',
+    'outtmpl': os.path.join(downloads_path, '%(title)s.%(ext)s'),
+    'cookiefile': '/path/to/your/cookies.txt',  # Adicione esta linha
+    'progress_hooks': [progress_hook],
+}
