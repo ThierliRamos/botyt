@@ -39,5 +39,14 @@ def index():
 
 @youtube_app.route('/download_audio', methods=['POST'])
 def download_audio_route():
-    # Seu código para download
-    pass
+    url = request.form['url']
+    if "youtube.com" not in url and "youtu.be" not in url:
+        return jsonify({'status': 'error', 'message': 'URL inválida!'}), 400
+
+    try:
+        thread = Thread(target=download_audio, args=(url,))
+        thread.start()
+        return jsonify({'status': 'success'})
+    except Exception as e:
+        print(f"Erro ao iniciar o download: {e}")
+        return jsonify({'status': 'error', 'message': 'Erro ao iniciar o download.'}), 500
