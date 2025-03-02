@@ -20,13 +20,12 @@ def download_video(url, output_file):
         elif d['status'] == 'finished':
             download_progress = 100
 
-     options = {
-    'format': 'bestvideo+bestaudio/best',  # Seleciona o melhor vídeo e áudio disponíveis
-    'videoformat': 'mp4',                   # Define o formato de saída do vídeo como MP4 (embora 'format' normalmente seja suficiente)
-    'outtmpl': output_file,                 # Especifica o caminho do arquivo de saída
-    'cookiefile': 'cookies/cookies.txt',    # Caminho para o arquivo de cookies
-    'progress_hooks': [progress_hook],      # Função de callback para acompanhar o progresso do download
-}
+    options = {
+        'format': 'bestvideo+bestaudio/best',  # Seleciona o melhor vídeo e áudio disponíveis
+        'outtmpl': output_file,                 # Especifica o caminho do arquivo de saída
+        'cookiefile': 'cookies/cookies.txt',    # Caminho para o arquivo de cookies
+        'progress_hooks': [progress_hook],      # Função de callback para acompanhar o progresso do download
+    }
 
     try:
         with yt_dlp.YoutubeDL(options) as ydl:
