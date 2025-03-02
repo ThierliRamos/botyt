@@ -4,11 +4,7 @@ import re
 
 app = Flask(__name__)
 
-@app.route('/')
-def cpf2():
-    return render_template('cpf.html')
-
-@app.route('/cpf2', methods=['POST'])
+@app.route('/consultar_cpf', methods=['POST'])
 def consulta_cpf():
     cpf = request.form.get('cpf')
 
@@ -25,8 +21,8 @@ def consulta_cpf():
         # Captura os dados retornados
         cpf_data = response.json().get('Resultado')
         
-        # Imprime a estrutura do cpf_data para depuração
-        print("Dados retornados da API:", cpf_data)  # Para depuração
+        # Debug: imprime a estrutura do cpf_data
+        print("Dados retornados da API:", cpf_data)
         
         # Usar regex para extrair as informações
         resultados = {
