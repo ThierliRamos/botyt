@@ -53,9 +53,37 @@ def check_ip():
     resultado = buscar_informacoes_ip(ip_address, is_dono=False, is_vip=True)
     return render_template('ip.html', message=resultado)
 
-@app.route('/consultar_cpf')
-def consultar_cpf_page():
-    return render_template('cpf.html')  # Renderiza a página de consulta de CPF
+@app.route('/consultar_cpf', methods=['GET', 'POST'])
+def consultar_cpf():
+    if request.method == 'POST':
+        cpf = request.form.get('cpf')
+        if not cpf:
+            return jsonify({'status': 'error', 'message': '🤔 Cadê o CPF?'}), 400
+
+        try:
+            response = requests.get(f'http://api2.minerdapifoda.xyz:8080/api/cpf3?cpf={cpf}')
+            if response.status_code != 200:
+                return jsonify({'status': 'error', 'message': '❌ Não foi encontrado informações para o CPF informado.'}), 404
+            
+            cpf_data = response.json().get('Resultado')
+            resultados = {
+                'cpf': re.search(r'CPF:\s*([\d\-]+)', cpf_data).group(1),
+                'nome': re.search(r'Nome:\s*(.*)', cpf_data).group(1),
+                'sexo': re.search(r'Sexo:\s*(.*)', cpf_data).group(1),
+                'data_nascimento': re.search(r'Data de Nascimento:\s*(.*)', cpf_data).group(1)
+            }
+            resultado_mensagem = (
+                f"CPF: {resultados['cpf']}\n"
+                f"Nome: {resultados['nome']}\n"
+                f"Sexo: {resultados['sexo']}\n"
+                f"Data de Nascimento: {resultados['data_nascimento']}"
+            )
+            return jsonify({'status': 'success', 'data': resultado_mensagem}), 200
+
+        except Exception as e:
+            return jsonify({'status': 'error', 'message': '❌ Ocorreu um erro ao consultar o CPF.'}), 500
+
+    return render_template('cpf.html')  # Para GET, renderiza a página
 
 @app.route('/youtube')
 def consultar_youtube():
