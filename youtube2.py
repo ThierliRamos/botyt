@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, render_template
 import yt_dlp
 import os
 from threading import Thread
@@ -40,7 +40,7 @@ def index():
 @youtube2_app.route('/download_video', methods=['POST'])
 def download_video_route():
     url = request.form['url']
-    format = request.form['format']
+    video_format = request.form['format']  # Renomeado para evitar conflito com a função de download
 
     # Validação da URL
     if "youtube.com" not in url and "youtu.be" not in url:
@@ -56,6 +56,7 @@ def download_video_route():
     if not video_id:
         return jsonify({'status': 'error', 'message': 'ID do vídeo não encontrado!'}), 400
 
+    # Definindo o caminho para a pasta de Downloads
     downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
     output_file_path = os.path.join(downloads_path, f"{video_id}.mp4")
 
