@@ -100,7 +100,7 @@
         <a href="/main" class="back-button">Voltar para o Início</a> <!-- Botão de voltar no topo -->
         <h1>Baixar Vídeos do YouTube</h1>
         <p>Baixe qualquer vídeo do YouTube.</p>
-        <form id="download-form" action="/download_video" method="post" onsubmit="startDownload(event)">
+           <form id="download-form" action="/youtube2/download_video" method="post" onsubmit="startDownload(event)">
             <input type="text" id="url" name="url" placeholder="Cole o link do YouTube aqui" required>
             <select id="format" name="format">
                 <option value="bestvideo+bestaudio/best">MP4 (Melhor Qualidade)</option>
