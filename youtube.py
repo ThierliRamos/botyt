@@ -1,52 +1,53 @@
-from flask import Flask, render_template, request
+from flask import Flask, request, jsonify, render_template
+import yt_dlp
 import os
-import requests
-import re
+from threading import Thread
 
 app = Flask(__name__)
 
+# Variável global para armazenar o progresso do download
+download_progress = 0
+
+def download_audio(url):
+    global download_progress
+    download_progress = 0
+
+    def progress_hook(d):
+        global download_progress
+        if d['status'] == 'downloading':
+            download_progress = d['downloaded_bytes'] / d['total_bytes'] * 100
+        elif d['status'] == 'finished':
+            download_progress = 100
+
+    # Define o caminho para a pasta Downloads do usuário
+    downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
+
+    options = {
+        'format': 'bestaudio/best',  # Seleciona o melhor formato de áudio disponível
+        'extractaudio': True,         # Extrai somente o áudio do vídeo
+        'audioformat': 'mp3',         # Formato do áudio
+        'outtmpl': os.path.join(downloads_path, '%(title)s.%(ext)s'),  # Salva na pasta Downloads
+        'progress_hooks': [progress_hook],
+    }
+    
+    with yt_dlp.YoutubeDL(options) as ydl:
+        ydl.download([url])
+
 @app.route('/')
-def youtube():
-    return render_template('youtube.html', message=None)
+def index():
+    return render_template('youtube.html')  # Serve a página HTML
 
 @app.route('/download', methods=['POST'])
 def download():
     url = request.form['url']
-    try:
-        id_video = extrair_id_video(url)
-        if not id_video:
-            message = "Link inválido!"
-            return render_template('youtube.html', message=message)
+    thread = Thread(target=download_audio, args=(url,))
+    thread.start()
+    return jsonify({'status': 'success'})
 
-        # Baixar o áudio usando a API do RapidAPI
-        audio_url = f"https://youtube-mp3-audio-video-downloader.p.rapidapi.com/download-mp3/{id_video}"
-        headers = {
-            "x-rapidapi-key": "99bb57d209mshb6ca809dc147a3ep1a51e7jsnf829ae92aef6",  # Chave da API hardcoded
-            "x-rapidapi-host": "youtube-mp3-audio-video-downloader.p.rapidapi.com"
-        }
-        resposta = requests.get(audio_url, headers=headers)
-
-        if resposta.status_code == 200:
-            file_path = f'downloads/{id_video}.mp3'
-            with open(file_path, 'wb') as f:
-                f.write(resposta.content)
-
-            message = "Música baixada com sucesso!"
-            return render_template('youtube.html', message=message)
-        else:
-            message = f"Erro ao baixar a música! Código de resposta: {resposta.status_code}"
-            return render_template('youtube.html', message=message)
-
-    except Exception as e:
-        message = str(e)
-        return render_template('youtube.html', message=message)
-
-def extrair_id_video(url):
-    regex = r'(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^&\n]{11})'
-    match = re.search(regex, url)
-    return match.group(1) if match else None
+@app.route('/progress', methods=['GET'])
+def progress():
+    return jsonify({'progress': download_progress})
 
 if __name__ == '__main__':
-    if not os.path.exists('downloads'):
-        os.makedirs('downloads')
+    # Execute o servidor Flask
     app.run(debug=True)
