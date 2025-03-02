@@ -28,7 +28,7 @@
             margin-bottom: 10px;
             color: #333;
         }
-        input[type="text"] {
+        input[type="text"], select {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
@@ -102,6 +102,11 @@
         <p>Baixe qualquer vídeo do YouTube.</p>
         <form id="download-form" action="/download_video" method="post" onsubmit="startDownload(event)">
             <input type="text" id="url" name="url" placeholder="Cole o link do YouTube aqui" required>
+            <select id="format" name="format">
+                <option value="bestvideo+bestaudio/best">MP4 (Melhor Qualidade)</option>
+                <option value="best">Melhor Vídeo</option>
+                <option value="worst">Pior Vídeo</option>
+            </select>
             <button type="submit">Baixar</button>
         </form>
         <div id="progress-container">
@@ -115,6 +120,7 @@
         function startDownload(event) {
             event.preventDefault();
             const url = document.getElementById('url').value;
+            const format = document.getElementById('format').value; // Obtém o formato selecionado
             const statusMessage = document.getElementById('status-message');
             const progressContainer = document.getElementById('progress-container');
             const progressBar = document.getElementById('progress-bar');
@@ -128,7 +134,7 @@
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: new URLSearchParams({ url: url })
+                body: new URLSearchParams({ url: url, format: format }) // Envia o formato selecionado
             })
             .then(response => response.json())
             .then(data => {
