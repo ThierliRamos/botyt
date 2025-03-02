@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template
+from flask import Blueprint, request, jsonify
 import yt_dlp
 import os
 from threading import Thread
@@ -30,7 +30,7 @@ def download_video(url, output_file, format):
         with yt_dlp.YoutubeDL(options) as ydl:
             ydl.download([url])
     except Exception as e:
-        print(f"Erro: {e}")
+        print(f"Erro ao baixar o vídeo: {e}")
 
 @youtube2_app.route('/')
 def index():
@@ -38,16 +38,20 @@ def index():
 
 @youtube2_app.route('/download_video', methods=['POST'])
 def download_video_route():
-    print("Requisição recebida na rota /download_video")
     url = request.form['url']
     format = request.form['format']
 
     # Validação da URL
     if "youtube.com" not in url and "youtu.be" not in url:
         return jsonify({'status': 'error', 'message': 'URL inválida!'}), 400
-    
+
+    # Extrair o ID do vídeo
     parsed_url = urlparse(url)
-    video_id = parse_qs(parsed_url.query).get('v', [None])[0]
+    if "youtube.com" in url:
+        video_id = parse_qs(parsed_url.query).get('v', [None])[0]
+    else:
+        video_id = parsed_url.path.split('/')[-1]  # Para youtu.be
+
     if not video_id:
         return jsonify({'status': 'error', 'message': 'ID do vídeo não encontrado!'}), 400
 
