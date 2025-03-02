@@ -6,7 +6,6 @@ from threading import Thread
 # Criação da Blueprint
 youtube_app = Blueprint('youtube', __name__)
 
-# Variável global para armazenar o progresso do download
 download_progress = 0
 
 def download_audio(url):
@@ -29,7 +28,7 @@ def download_audio(url):
         'outtmpl': os.path.join(downloads_path, '%(title)s.%(ext)s'),
         'progress_hooks': [progress_hook],
     }
-    
+
     with yt_dlp.YoutubeDL(options) as ydl:
         ydl.download([url])
 
@@ -40,13 +39,13 @@ def index():
 @youtube_app.route('/download_audio', methods=['POST'])
 def download_audio_route():
     url = request.form['url']
+    # Validação da URL
     if "youtube.com" not in url and "youtu.be" not in url:
         return jsonify({'status': 'error', 'message': 'URL inválida!'}), 400
+    thread = Thread(target=download_audio, args=(url,))
+    thread.start()
+    return jsonify({'status': 'success'})
 
-    try:
-        thread = Thread(target=download_audio, args=(url,))
-        thread.start()
-        return jsonify({'status': 'success'})
-    except Exception as e:
-        print(f"Erro ao iniciar o download: {e}")
-        return jsonify({'status': 'error', 'message': 'Erro ao iniciar o download.'}), 500
+@youtube_app.route('/progress', methods=['GET'])
+def progress():
+    return jsonify({'progress': download_progress})
