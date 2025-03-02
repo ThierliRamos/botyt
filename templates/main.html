@@ -18,7 +18,7 @@
             <h2 class="centralizado">Nossos Serviços</h2>
             <div class="service-buttons">
                 <button onclick="location.href='{{ url_for('bin_page') }}'"><b>Consultar BIN</b></button>
-                <button onclick="consultar('CPF')"><b>Consultar CPF</b></button>
+                <button onclick="location.href='{{ url_for('consultar_cpf_page') }}'"><b>Consultar CPF</b></button> <!-- Atualizado -->
                 <button onclick="consultar('Nome')"><b>Consultar Nome</b></button>
                 <button onclick="location.href='{{ url_for('ip_page') }}'"><b>Consultar IP</b></button>
             </div>
