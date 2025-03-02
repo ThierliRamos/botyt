@@ -64,9 +64,7 @@ def download_video_route():
     # Iniciar o download em um thread
     thread = Thread(target=download_video, args=(url, output_file_path))
     thread.start()
-
-    # Esperar o download terminar
-    thread.join()
+    thread.join()  # Aguardar o término do download
 
     # Retornar o arquivo para download
     return send_file(output_file_path, as_attachment=True, download_name=f"{video_id}.mp4")
