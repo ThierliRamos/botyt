@@ -82,9 +82,9 @@
         <a href="/main" class="back-button">Voltar para o Início</a> <!-- Botão de voltar no topo -->
         <h1>Baixar Músicas do YouTube</h1>
         <p>Baixe o Áudio de qualquer vídeo do YouTube.</p>
-        <form action="/download_audio" method="post" onsubmit="showLoadingMessage()">
-            <input type="text" name="url" placeholder="Cole o link do YouTube aqui" required>
-            <button type="submit">Baixar</button>
+        <form action="{{ url_for('youtube.download_audio_route') }}" method="post">
+            <input type="text" name="url" placeholder="Cole a URL do vídeo aqui">
+            <button type="submit">Baixar Áudio</button>
         </form>
         <div id="loading-message">Baixando Música, Aguarde...</div>
         {% if message %}
