@@ -3,6 +3,7 @@ import yt_dlp
 import os
 from threading import Thread
 from urllib.parse import urlparse, parse_qs
+import time
 
 # Criação da Blueprint
 youtube2_app = Blueprint('youtube2', __name__)
@@ -30,6 +31,7 @@ def download_video(url, output_file):
     try:
         with yt_dlp.YoutubeDL(options) as ydl:
             ydl.download([url])
+            print(f"Download concluído: {output_file}")  # Log após conclusão do download
     except Exception as e:
         print(f"Erro ao baixar o vídeo: {e}")
 
@@ -64,7 +66,13 @@ def download_video_route():
     # Iniciar o download em um thread
     thread = Thread(target=download_video, args=(url, output_file_path))
     thread.start()
-    thread.join()  # Aguardar o término do download
+
+    # Esperar o download terminar
+    thread.join()  # Aguarda o término do download
+
+    # Verificar se o arquivo foi criado antes de tentar enviá-lo
+    if not os.path.exists(output_file_path):
+        return jsonify({'status': 'error', 'message': 'O arquivo não foi criado.'}), 500
 
     # Retornar o arquivo para download
     return send_file(output_file_path, as_attachment=True, download_name=f"{video_id}.mp4")
