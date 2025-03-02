@@ -3,7 +3,6 @@ import yt_dlp
 import os
 from threading import Thread
 from urllib.parse import urlparse, parse_qs
-import time
 
 # Criação da Blueprint
 youtube2_app = Blueprint('youtube2', __name__)
@@ -22,18 +21,21 @@ def download_video(url, output_file):
             download_progress = 100
 
     options = {
-        'format': 'bestvideo+bestaudio/best',  # Seleciona o melhor vídeo e áudio disponíveis
-        'outtmpl': output_file,                 # Especifica o caminho do arquivo de saída
-        'cookiefile': 'cookies/cookies.txt',    # Caminho para o arquivo de cookies
-        'progress_hooks': [progress_hook],      # Função de callback para acompanhar o progresso do download
+        'format': 'bestaudio/best',  # Seleciona o melhor áudio disponível
+        'outtmpl': output_file,       # Especifica o caminho do arquivo de saída
+        'cookiefile': 'cookies/cookies.txt',  # Caminho para o arquivo de cookies
+        'progress_hooks': [progress_hook],    # Função de callback para acompanhar o progresso do download
     }
 
     try:
+        print(f"Iniciando download: {url}")  # Log de início do download
         with yt_dlp.YoutubeDL(options) as ydl:
             ydl.download([url])
             print(f"Download concluído: {output_file}")  # Log após conclusão do download
     except Exception as e:
-        print(f"Erro ao baixar o vídeo: {e}")
+        print(f"Erro ao baixar o vídeo: {e}")  # Log de erro
+        return False
+    return True
 
 @youtube2_app.route('/')
 def index():
@@ -42,7 +44,6 @@ def index():
 @youtube2_app.route('/download_video', methods=['POST'])
 def download_video_route():
     url = request.form['url']
-    video_format = request.form['format']  # Renomeado para evitar conflito com a função de download
 
     # Validação da URL
     if "youtube.com" not in url and "youtu.be" not in url:
@@ -59,9 +60,9 @@ def download_video_route():
         return jsonify({'status': 'error', 'message': 'ID do vídeo não encontrado!'}), 400
 
     # Definindo o caminho para um arquivo temporário
-    output_file_path = f"/tmp/{video_id}.mp4"  # Usar um diretório temporário
+    output_file_path = f"/tmp/{video_id}.mp3"  # Usar um diretório temporário para áudio
 
-    print(f"Iniciando download do vídeo: {url} para {output_file_path}")  # Log de depuração
+    print(f"Iniciando download do áudio: {url} para {output_file_path}")  # Log de depuração
 
     # Iniciar o download em um thread
     thread = Thread(target=download_video, args=(url, output_file_path))
@@ -72,10 +73,11 @@ def download_video_route():
 
     # Verificar se o arquivo foi criado antes de tentar enviá-lo
     if not os.path.exists(output_file_path):
+        print(f"Arquivo não encontrado: {output_file_path}")  # Log de erro
         return jsonify({'status': 'error', 'message': 'O arquivo não foi criado.'}), 500
 
     # Retornar o arquivo para download
-    return send_file(output_file_path, as_attachment=True, download_name=f"{video_id}.mp4")
+    return send_file(output_file_path, as_attachment=True, download_name=f"{video_id}.mp3", mimetype='audio/mpeg')
 
 @youtube2_app.route('/progress', methods=['GET'])
 def progress():
