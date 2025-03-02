@@ -1,9 +1,10 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Blueprint, request, jsonify, render_template
 import yt_dlp
 import os
 from threading import Thread
 
-app = Flask(__name__)
+# Criação da Blueprint
+youtube2_app = Blueprint('youtube2', __name__)
 
 download_progress = 0
 
@@ -29,11 +30,11 @@ def download_video(url):
     with yt_dlp.YoutubeDL(options) as ydl:
         ydl.download([url])
 
-@app.route('/')
+@youtube2_app.route('/')
 def index():
     return render_template('youtube2.html')
 
-@app.route('/download_video', methods=['POST'])
+@youtube2_app.route('/download_video', methods=['POST'])
 def download_video_route():
     url = request.form['url']
     # Validação da URL
@@ -43,9 +44,6 @@ def download_video_route():
     thread.start()
     return jsonify({'status': 'success'})
 
-@app.route('/progress', methods=['GET'])
+@youtube2_app.route('/progress', methods=['GET'])
 def progress():
     return jsonify({'progress': download_progress})
-
-if __name__ == '__main__':
-    app.run(debug=True)
