@@ -38,6 +38,7 @@ def index():
 
 @youtube2_app.route('/download_video', methods=['POST'])
 def download_video_route():
+    print("Requisição recebida na rota /download_video")
     url = request.form['url']
     format = request.form['format']
 
