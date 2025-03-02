@@ -38,7 +38,7 @@
         }
         button {
             padding: 10px;
-            background-color: #28a745;
+            background-color: #28a745; /* Cor do botão */
             color: white;
             border: none;
             border-radius: 5px;
@@ -47,7 +47,7 @@
             transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #218838;
+            background-color: #218838; /* Cor do botão ao passar o mouse */
         }
         .message {
             margin: 15px 0;
@@ -60,11 +60,26 @@
             margin-top: 10px;
             color: #007bff;
         }
+        .back-button {
+            background-color: #28a745; /* Cor do botão de voltar */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 20px; /* Espaço abaixo do botão */
+            text-decoration: none; /* Remove o sublinhado */
+            display: inline-block; /* Permite que o botão seja um bloco */
+        }
+        .back-button:hover {
+            background-color: #218838; /* Cor do botão de voltar ao passar o mouse */
+        }
     </style>
 </head>
 <body>
-    <a href="/main" class="back-button">Voltar para o Início</a>
     <div class="container">
+        <a href="/main" class="back-button">Voltar para o Início</a> <!-- Botão de voltar no topo -->
         <h1>Baixar Músicas do YouTube</h1>
         <p>Baixe o Áudio de qualquer vídeo do YouTube.</p>
         <form action="/download_audio" method="post" onsubmit="showLoadingMessage()">
