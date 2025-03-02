@@ -32,6 +32,7 @@ def login():
     senha = request.form.get('senha')
     if verificar_credenciais(usuario, senha):
         session['logged_in'] = True
+        print(f"Usuário {usuario} logado com sucesso.")  # Log do login
         return redirect(url_for('main'))
     else:
         return "Usuário ou senha inválidos!"
@@ -91,7 +92,7 @@ def consultar_cpf():
             return jsonify({'status': 'error', 'message': '❌ Ocorreu um erro ao consultar o CPF.'}), 500
 
     return render_template('cpf.html')
-    
+
 @app.route('/youtube')
 def consultar_youtube():
     return render_template('youtube.html')
@@ -102,6 +103,7 @@ def consul_youtube2():
 
 @app.route('/main')
 def main():
+    print(f"Usuário está logado: {session.get('logged_in')}")  # Log do status da sessão
     if not session.get('logged_in'):
         return redirect(url_for('home'))
     return render_template('main.html')
@@ -109,6 +111,7 @@ def main():
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
+    print("Usuário deslogado.")  # Log do logout
     return redirect(url_for('home'))
 
 if __name__ == '__main__':
