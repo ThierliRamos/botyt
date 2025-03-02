@@ -20,14 +20,10 @@ def download_video(url, output_file, format):
         elif d['status'] == 'finished':
             download_progress = 100
 
-    # Caminho fixo para o arquivo de cookies
-    cookies_file = 'cookies/cookies'
-
     options = {
         'format': format,
         'outtmpl': output_file,
         'progress_hooks': [progress_hook],
-        'cookiefile': 'cookies/cookies.txt',  # Verifique se este caminho está correto
     }
 
     try:
@@ -43,23 +39,19 @@ def index():
 @youtube2_app.route('/download_video', methods=['POST'])
 def download_video_route():
     url = request.form['url']
-    format = request.form['format']  # Obtém o formato enviado pelo formulário
-
-    print(f"URL recebida: {url}")
-    print(f"Formato recebido: {format}")
+    format = request.form['format']
 
     # Validação da URL
     if "youtube.com" not in url and "youtu.be" not in url:
         return jsonify({'status': 'error', 'message': 'URL inválida!'}), 400
     
-    # Configuração do caminho de download
     parsed_url = urlparse(url)
     video_id = parse_qs(parsed_url.query).get('v', [None])[0]
     if not video_id:
         return jsonify({'status': 'error', 'message': 'ID do vídeo não encontrado!'}), 400
 
     downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
-    output_file_path = os.path.join(downloads_path, f"{video_id}.mp4")  # Altere a extensão conforme necessário
+    output_file_path = os.path.join(downloads_path, f"{video_id}.mp4")
 
     thread = Thread(target=download_video, args=(url, output_file_path, format))
     thread.start()
