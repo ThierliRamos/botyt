@@ -54,7 +54,7 @@ def check_ip():
     return render_template('ip.html', message=resultado)
 
 @app.route('/')
-def cpf():
+def cpf2():
     return render_template('cpf.html')  # Certifique-se de que este é o seu arquivo de entrada
 
 @app.route('/consultar_cpf')
