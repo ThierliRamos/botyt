@@ -9,7 +9,7 @@ youtube2_app = Blueprint('youtube2', __name__)
 
 download_progress = 0
 
-def download_video(url, output_file, format):
+def download_video(url, output_file):
     global download_progress
     download_progress = 0
 
@@ -20,19 +20,14 @@ def download_video(url, output_file, format):
         elif d['status'] == 'finished':
             download_progress = 100
 
-          # Certifique-se de que este caminho está correto
-   cookies_file_path = os.path.join(os.getcwd(), 'cookies', 'cookies.txt')
-
-       if not os.path.exists(cookies_file_path):
-       print(f"Arquivo de cookies não encontrado em: {cookies_file_path}")
-   else:
-       print(f"Arquivo de cookies encontrado em: {cookies_file_path}")
+    # Caminho para o arquivo de cookies
+    cookies_file_path = os.path.join(os.getcwd(), 'cookies', 'cookies.txt')  # Ajuste conforme necessário
 
     options = {
-        'format': format,
+        'format': 'bestvideo+bestaudio/best',  # Aqui você pode ajustar o formato conforme necessário
         'outtmpl': output_file,
         'progress_hooks': [progress_hook],
-        'cookies_from_browser': True,  # Adicione esta linha se você estiver usando cookies do navegador
+        'cookiefile': cookies_file_path,  # Adiciona o arquivo de cookies
     }
 
     try:
@@ -69,7 +64,7 @@ def download_video_route():
 
     print(f"Iniciando download do vídeo: {url} para {output_file_path}")  # Log de depuração
 
-    thread = Thread(target=download_video, args=(url, output_file_path, format))
+    thread = Thread(target=download_video, args=(url, output_file_path))
     thread.start()
 
     return jsonify({'status': 'success'})
