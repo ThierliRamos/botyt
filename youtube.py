@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request
 import os
 import requests
 import re
@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def youtube():
-    return render_template('youtube.html', message=None)  # Passando uma mensagem inicial como None
+    return render_template('youtube.html', message=None)
 
 @app.route('/download', methods=['POST'])
 def download():
@@ -21,7 +21,7 @@ def download():
         # Baixar o áudio usando a API do RapidAPI
         audio_url = f"https://youtube-mp3-audio-video-downloader.p.rapidapi.com/download-mp3/{id_video}"
         headers = {
-            "x-rapidapi-key": "99bb57d209mshb6ca809dc147a3ep1a51e7jsnf829ae92aef6",
+            "x-rapidapi-key": "99bb57d209mshb6ca809dc147a3ep1a51e7jsnf829ae92aef6",  # Chave da API hardcoded
             "x-rapidapi-host": "youtube-mp3-audio-video-downloader.p.rapidapi.com"
         }
         resposta = requests.get(audio_url, headers=headers)
@@ -31,8 +31,8 @@ def download():
             with open(file_path, 'wb') as f:
                 f.write(resposta.content)
 
-            message = "Música baixada com sucesso!"  # Mensagem de sucesso
-            return render_template('youtube.html', message=message)  # Retorna para a página com a mensagem
+            message = "Música baixada com sucesso!"
+            return render_template('youtube.html', message=message)
         else:
             message = f"Erro ao baixar a música! Código de resposta: {resposta.status_code}"
             return render_template('youtube.html', message=message)
@@ -48,5 +48,5 @@ def extrair_id_video(url):
 
 if __name__ == '__main__':
     if not os.path.exists('downloads'):
-        os.makedirs('downloads')  # Cria a pasta para downloads se não existir
+        os.makedirs('downloads')
     app.run(debug=True)
