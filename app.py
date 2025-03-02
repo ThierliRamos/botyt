@@ -8,9 +8,9 @@ from youtube2 import app as youtube2_app  # Importa as rotas do youtube2.py
 app = Flask(__name__)
 app.secret_key = 'uma_chave_secreta'
 
-# Registra as blueprints ou as rotas
-app.register_blueprint(youtube_app)
-app.register_blueprint(youtube2_app)
+# Registra as blueprints
+app.register_blueprint(youtube_app, url_prefix='/youtube')  # Registrar a blueprint do youtube
+app.register_blueprint(youtube2_app, url_prefix='/youtube2')  # Registrar a blueprint do youtube2
 
 def verificar_credenciais(usuario, senha):
     with open('usuarios.txt', 'r') as f:
