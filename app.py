@@ -53,10 +53,6 @@ def check_ip():
     resultado = buscar_informacoes_ip(ip_address, is_dono=False, is_vip=True)
     return render_template('ip.html', message=resultado)
 
-@app.route('/')
-def cpf2():
-    return render_template('cpf.html')  # Certifique-se de que este é o seu arquivo de entrada
-
 @app.route('/consultar_cpf')
 def consultar_cpf_page():
     return render_template('cpf.html')  # Renderiza a página de consulta de CPF
