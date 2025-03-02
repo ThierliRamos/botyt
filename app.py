@@ -2,8 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import os
 from bin import verificar_bin
 from ip import buscar_informacoes_ip
-from youtube import app as youtube_app  # Importa as rotas do youtube.py
-from youtube2 import app as youtube2_app  # Importa as rotas do youtube2.py
+from youtube import youtube_app  # Importa a blueprint do youtube.py
+from youtube2 import youtube2_app  # Importa a blueprint do youtube2.py
 
 app = Flask(__name__)
 app.secret_key = 'uma_chave_secreta'
