@@ -3,6 +3,7 @@ import yt_dlp
 import os
 from threading import Thread
 import time
+from urllib.parse import urlparse, parse_qs
 
 # Criação da Blueprint
 youtube_app = Blueprint('youtube', __name__)
@@ -25,13 +26,15 @@ def download_audio(url, output_file):
         'extractaudio': True,
         'audioformat': 'mp3',
         'outtmpl': output_file,
-        'cookiefile': '/opt/render/project/src/cookies/cookies.txt',  # Novo caminho
+        'cookiefile': '/opt/render/project/src/cookies/cookies.txt',  # Verifique se este caminho está correto
         'progress_hooks': [progress_hook],
     }
 
-    with yt_dlp.YoutubeDL(options) as ydl:
-        ydl.download([url])
-
+    try:
+        with yt_dlp.YoutubeDL(options) as ydl:
+            ydl.download([url])
+    except Exception as e:
+        return str(e)  # Retorne a mensagem de erro se necessário
 
 @youtube_app.route('/')
 def index():
@@ -45,9 +48,13 @@ def download_audio_route():
     if "youtube.com" not in url and "youtu.be" not in url:
         return jsonify({'status': 'error', 'message': 'URL inválida!'}), 400
     
-    # Nome do arquivo de saída
-    title = url.split('=')[1]  # Extraia o ID do vídeo ou faça uma lógica para obter o título
-    output_file_path = os.path.join(os.path.expanduser("~"), "Downloads", f"{title}.mp3")
+    # Extraindo o ID do vídeo
+    parsed_url = urlparse(url)
+    video_id = parse_qs(parsed_url.query).get('v', [None])[0]
+    if not video_id:
+        return jsonify({'status': 'error', 'message': 'ID do vídeo não encontrado!'}), 400
+
+    output_file_path = os.path.join(os.path.expanduser("~"), "Downloads", f"{video_id}.mp3")
     
     # Inicie o download em uma thread
     thread = Thread(target=download_audio, args=(url, output_file_path))
