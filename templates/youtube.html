@@ -13,7 +13,6 @@
             margin: 0;
             background-color: #f4f4f4;
             font-family: Arial, sans-serif;
-            flex-direction: column; /* Altera a direção do layout para coluna */
         }
         .container {
             background-color: white;
@@ -54,31 +53,16 @@
             margin: 15px 0;
             color: #333;
             font-weight: bold;
-            text-align: left; /* Para alinhar à esquerda */
+            text-align: left;
         }
         #loading-message {
             display: none;
             margin-top: 10px;
-            color: #007bff; /* Azul para a mensagem de carregamento */
-        }
-        .back-button {
-            background-color: #28a745; /* Cor verde */
-            color: white;            
-            padding: 10px 20px;            
-            border-radius: 5px;            
-            text-decoration: none; /* Remove sublinhado do link */            
-            font-size: 16px;            
-            margin-bottom: 20px; /* Espaçamento abaixo do botão */            
-            transition: background-color 0.3s;        
-            text-align: center; /* Centraliza o texto */
-        }        
-        .back-button:hover {            
-            background-color: #218838; /* Cor ao passar o mouse */        
+            color: #007bff;
         }
     </style>
 </head>
 <body>
-    <a href="/main" class="back-button">Voltar para o Início</a> <!-- Botão estilizado -->
     <div class="container">
         <h1>Baixar Músicas do YouTube</h1>
         <p>Baixe o Áudio de qualquer vídeo do YouTube.</p>
@@ -86,15 +70,15 @@
             <input type="text" name="url" placeholder="Cole o link do YouTube aqui" required>
             <button type="submit">Baixar</button>
         </form>
-        <div id="loading-message">Baixando Música, Aguarde...</div> <!-- Mensagem de carregamento -->
+        <div id="loading-message">Baixando Música, Aguarde...</div>
         {% if message %}
-            <div class="message">{{ message|safe }}</div>  <!-- Exibe a mensagem -->
+            <div class="message">{{ message|safe }}</div>
         {% endif %}
     </div>
 
     <script>
         function showLoadingMessage() {
-            document.getElementById('loading-message').style.display = 'block'; // Exibe a mensagem de carregamento
+            document.getElementById('loading-message').style.display = 'block';
         }
     </script>
 </body>
