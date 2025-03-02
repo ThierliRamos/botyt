@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template
+from flask import Blueprint, request, jsonify, render_template, send_file
 import yt_dlp
 import os
 from threading import Thread
@@ -56,16 +56,20 @@ def download_video_route():
     if not video_id:
         return jsonify({'status': 'error', 'message': 'ID do vídeo não encontrado!'}), 400
 
-    # Definindo o caminho para a pasta de Downloads
-    downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
-    output_file_path = os.path.join(downloads_path, f"{video_id}.mp4")
+    # Definindo o caminho para um arquivo temporário
+    output_file_path = f"/tmp/{video_id}.mp4"  # Usar um diretório temporário
 
     print(f"Iniciando download do vídeo: {url} para {output_file_path}")  # Log de depuração
 
+    # Iniciar o download em um thread
     thread = Thread(target=download_video, args=(url, output_file_path))
     thread.start()
 
-    return jsonify({'status': 'success'})
+    # Esperar o download terminar
+    thread.join()
+
+    # Retornar o arquivo para download
+    return send_file(output_file_path, as_attachment=True, download_name=f"{video_id}.mp4")
 
 @youtube2_app.route('/progress', methods=['GET'])
 def progress():
