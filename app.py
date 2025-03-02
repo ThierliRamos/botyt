@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import os
+import requests  # Importa a biblioteca requests
 from bin import verificar_bin
 from ip import buscar_informacoes_ip
 from youtube import youtube_app  # Importa a blueprint do youtube.py
