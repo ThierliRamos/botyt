@@ -100,7 +100,7 @@
         <a href="/main" class="back-button">Voltar para o Início</a> <!-- Botão de voltar no topo -->
         <h1>Baixar Vídeos do YouTube</h1>
         <p>Baixe qualquer vídeo do YouTube.</p>
-           <form id="download-form" action="/youtube2/download_video" method="post" onsubmit="startDownload(event)">
+        <form id="download-form" action="/youtube2/download_video" method="post" onsubmit="startDownload(event)">
             <input type="text" id="url" name="url" placeholder="Cole o link do YouTube aqui" required>
             <select id="format" name="format">
                 <option value="bestvideo+bestaudio/best">MP4 (Melhor Qualidade)</option>
@@ -129,7 +129,7 @@
             statusMessage.innerText = "Iniciando download...";
             progressContainer.style.display = 'block';
 
-            fetch('/download_video', {
+            fetch('/youtube2/download_video', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -158,7 +158,7 @@
             const progressText = document.getElementById('progress-text');
             const statusMessage = document.getElementById('status-message');
 
-            fetch('/progress')
+            fetch('/youtube2/progress')
             .then(response => response.json())
             .then(data => {
                 const progress = data.progress;
