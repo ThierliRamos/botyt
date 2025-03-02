@@ -82,8 +82,8 @@
         <a href="/main" class="back-button">Voltar para o Início</a> <!-- Botão de voltar no topo -->
         <h1>Baixar Músicas do YouTube</h1>
         <p>Baixe o Áudio de qualquer vídeo do YouTube.</p>
-        <form action="{{ url_for('youtube.download_audio_route') }}" method="post">
-            <input type="text" name="url" placeholder="Cole a URL do vídeo aqui">
+        <form id="download-form" onsubmit="downloadAudio(event)">
+            <input type="text" name="url" id="video-url" placeholder="Cole a URL do vídeo aqui" required>
             <button type="submit">Baixar Áudio</button>
         </form>
         <div id="loading-message">Baixando Música, Aguarde...</div>
@@ -93,8 +93,45 @@
     </div>
 
     <script>
-        function showLoadingMessage() {
+        function downloadAudio(event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
+            const url = document.getElementById('video-url').value;
+
+            // Exibir a mensagem de carregamento
             document.getElementById('loading-message').style.display = 'block';
+
+            // Fazer a requisição AJAX
+            fetch('/youtube/download_audio', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'url': url
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.blob(); // Receber o arquivo como Blob
+                } else {
+                    throw new Error('Erro ao baixar o áudio');
+                }
+            })
+            .then(blob => {
+                const downloadUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = downloadUrl;
+                a.download = 'audio.mp3'; // Nome do arquivo a ser baixado
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(downloadUrl);
+                document.getElementById('loading-message').innerText = "Download concluído!"; // Mensagem de sucesso
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                document.getElementById('loading-message').innerText = "Erro ao baixar a música."; // Mensagem de erro
+            });
         }
     </script>
 </body>
