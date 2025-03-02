@@ -103,10 +103,14 @@ def consul_youtube2():
 
 @app.route('/main')
 def main():
-    print(f"Usuário está logado: {session.get('logged_in')}")  # Log do status da sessão
-    if not session.get('logged_in'):
-        return redirect(url_for('home'))
-    return render_template('main.html')
+    try:
+        print(f"Usuário está logado: {session.get('logged_in')}")  # Log do status da sessão
+        if not session.get('logged_in'):
+            return redirect(url_for('home'))
+        return render_template('main.html')
+    except Exception as e:
+        print(f"Erro ao acessar a página principal: {e}")  # Log do erro
+        return "Erro ao acessar a página principal.", 500
 
 @app.route('/logout')
 def logout():
