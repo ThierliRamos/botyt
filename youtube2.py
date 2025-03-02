@@ -54,6 +54,8 @@ def download_video_route():
     downloads_path = os.path.join(os.path.expanduser("~"), "Downloads")
     output_file_path = os.path.join(downloads_path, f"{video_id}.mp4")
 
+    print(f"Iniciando download do vídeo: {url} para {output_file_path}")  # Log de depuração
+
     thread = Thread(target=download_video, args=(url, output_file_path, format))
     thread.start()
 
