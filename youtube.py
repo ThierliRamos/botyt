@@ -2,14 +2,15 @@ from flask import Blueprint, request, jsonify, render_template, send_file
 import yt_dlp
 import os
 from threading import Thread
+import time
 from urllib.parse import urlparse, parse_qs
 
 # Criação da Blueprint
-youtube2_app = Blueprint('youtube2', __name__)
+youtube_app = Blueprint('youtube', __name__)
 
 download_progress = 0
 
-def download_video(url, output_file):
+def download_audio(url, output_file):
     global download_progress
     download_progress = 0
 
@@ -21,61 +22,51 @@ def download_video(url, output_file):
             download_progress = 100
 
     options = {
-        'format': 'bestaudio/best',  # Seleciona o melhor áudio disponível
-        'outtmpl': output_file,       # Especifica o caminho do arquivo de saída
-        'cookiefile': 'cookies/cookies.txt',  # Caminho para o arquivo de cookies
-        'progress_hooks': [progress_hook],    # Função de callback para acompanhar o progresso do download
+        'format': 'bestaudio/best',
+        'extractaudio': True,
+        'audioformat': 'mp3',
+        'outtmpl': output_file,
+        'cookiefile': 'cookies/cookies.txt',  # Verifique se este caminho está correto
+        'progress_hooks': [progress_hook],
     }
 
     try:
         with yt_dlp.YoutubeDL(options) as ydl:
             ydl.download([url])
-            print(f"Download concluído: {output_file}")  # Log após conclusão do download
     except Exception as e:
-        print(f"Erro ao baixar o vídeo: {e}")
+        return str(e)  # Retorne a mensagem de erro se necessário
 
-@youtube2_app.route('/')
+@youtube_app.route('/')
 def index():
-    return render_template('youtube2.html')
+    return render_template('youtube.html')
 
-@youtube2_app.route('/download_video', methods=['POST'])
-def download_video_route():
+@youtube_app.route('/download_audio', methods=['POST'])
+def download_audio_route():
     url = request.form['url']
-    video_format = request.form['format']  # Renomeado para evitar conflito com a função de download
-
+    
     # Validação da URL
     if "youtube.com" not in url and "youtu.be" not in url:
         return jsonify({'status': 'error', 'message': 'URL inválida!'}), 400
-
-    # Extrair o ID do vídeo
+    
+    # Extraindo o ID do vídeo
     parsed_url = urlparse(url)
-    if "youtube.com" in url:
-        video_id = parse_qs(parsed_url.query).get('v', [None])[0]
-    else:
-        video_id = parsed_url.path.split('/')[-1]  # Para youtu.be
-
+    video_id = parse_qs(parsed_url.query).get('v', [None])[0]
     if not video_id:
         return jsonify({'status': 'error', 'message': 'ID do vídeo não encontrado!'}), 400
 
-    # Definindo o caminho para um arquivo temporário
-    output_file_path = f"/tmp/{video_id}.mp3"  # Usar um diretório temporário para áudio
-
-    print(f"Iniciando download do áudio: {url} para {output_file_path}")  # Log de depuração
-
-    # Iniciar o download em um thread
-    thread = Thread(target=download_video, args=(url, output_file_path))
+    output_file_path = os.path.join(os.path.expanduser("~"), "Downloads", f"{video_id}.mp3")
+    
+    # Inicie o download em uma thread
+    thread = Thread(target=download_audio, args=(url, output_file_path))
     thread.start()
 
-    # Esperar o download terminar
-    thread.join()  # Aguarda o término do download
-
-    # Verificar se o arquivo foi criado antes de tentar enviá-lo
-    if not os.path.exists(output_file_path):
-        return jsonify({'status': 'error', 'message': 'O arquivo não foi criado.'}), 500
+    # Aguarde o download concluir antes de enviar o arquivo
+    while not os.path.exists(output_file_path):
+        time.sleep(1)  # Espera que o arquivo seja criado
 
     # Retornar o arquivo para download
-    return send_file(output_file_path, as_attachment=True, download_name=f"{video_id}.mp3", mimetype='audio/mpeg')
+    return send_file(output_file_path, as_attachment=True)
 
-@youtube2_app.route('/progress', methods=['GET'])
+@youtube_app.route('/progress', methods=['GET'])
 def progress():
     return jsonify({'progress': download_progress})
