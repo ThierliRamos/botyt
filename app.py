@@ -1,10 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import os
-from bin import verificar_bin  # Importa no início
-from ip import buscar_informacoes_ip  # Importa no início
+from bin import verificar_bin
+from ip import buscar_informacoes_ip
+from youtube import app as youtube_app  # Importa as rotas do youtube.py
+from youtube2 import app as youtube2_app  # Importa as rotas do youtube2.py
 
 app = Flask(__name__)
-app.secret_key = 'uma_chave_secreta'  # Necessário para gerenciar sessões
+app.secret_key = 'uma_chave_secreta'
+
+# Registra as blueprints ou as rotas
+app.register_blueprint(youtube_app)
+app.register_blueprint(youtube2_app)
 
 def verificar_credenciais(usuario, senha):
     with open('usuarios.txt', 'r') as f:
