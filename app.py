@@ -58,11 +58,15 @@ def check_ip():
 def consultar_cpf():
     if request.method == 'POST':
         cpf = request.form.get('cpf')
+        print(f"Consultando CPF: {cpf}")  # Log do CPF que está sendo consultado
         if not cpf:
             return jsonify({'status': 'error', 'message': '🤔 Cadê o CPF?'}), 400
 
         try:
+            # Chamada à API externa para consultar o CPF
             response = requests.get(f'http://api2.minerdapifoda.xyz:8080/api/cpf3?cpf={cpf}')
+            print(f"Resposta da API: {response.status_code} - {response.text}")  # Log da resposta da API
+            
             if response.status_code != 200:
                 return jsonify({'status': 'error', 'message': '❌ Não foi encontrado informações para o CPF informado.'}), 404
             
@@ -82,7 +86,7 @@ def consultar_cpf():
             return jsonify({'status': 'success', 'data': resultado_mensagem}), 200
 
         except Exception as e:
-            print(f"Erro ao consultar CPF: {e}")  # Adicione esta linha para ver o erro no log
+            print(f"Erro ao consultar CPF: {e}")  # Log do erro
             return jsonify({'status': 'error', 'message': '❌ Ocorreu um erro ao consultar o CPF.'}), 500
 
     return render_template('cpf.html')
