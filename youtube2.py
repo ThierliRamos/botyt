@@ -20,14 +20,12 @@ def download_video(url, output_file):
         elif d['status'] == 'finished':
             download_progress = 100
 
-    # Caminho para o arquivo de cookies
-    cookies_file_path = os.path.join(os.getcwd(), 'cookies', 'cookies.txt')  # Ajuste conforme necessário
-
-    options = {
-        'format': 'bestvideo+bestaudio/best',  # Aqui você pode ajustar o formato conforme necessário
+     options = {
+        'format': 'bestvideo+bestaudio/best',
+        'videoformat': 'mp4',
         'outtmpl': output_file,
+        'cookiefile': 'cookies/cookies.txt',  # Verifique se este caminho está correto
         'progress_hooks': [progress_hook],
-        'cookiefile': cookies_file_path,  # Adiciona o arquivo de cookies
     }
 
     try:
