@@ -168,6 +168,43 @@ def consultar_tel():
 
     return render_template('tel.html')  # Renderiza a página de consulta de telefone
 
+# CONSULTA DE NOMES
+
+@app.route('/consultar_nome', methods=['GET', 'POST'])
+def consultar_nome():
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona se não estiver logado
+
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        print(f"Consultando Nome: {nome}")
+
+        if not nome:
+            return jsonify(message="🤔 Cadê o Nome?"), 400
+
+        try:
+            cors_url = 'https://api.allorigins.win/get?url='
+            api_url = f'http://api2.minerdapifoda.xyz:8080/api/nomes?nome={nome}'
+            response = requests.get(cors_url + api_url)
+
+            if response.status_code == 200:
+                jsonData = response.json()
+                nomeData = jsonData.get('contents')
+
+                if nomeData:
+                    return jsonify(status="success", data=nomeData)
+
+                return jsonify(message="❌ Nome não encontrado ou inexistente!"), 404
+
+            return jsonify(message="❌ Nome não encontrado ou inexistente!"), 404
+
+        except Exception as e:
+            print(f"Erro ao consultar Nome: {e}")
+            return jsonify(message="❌ Ocorreu um erro ao consultar o nome."), 500
+
+    # Renderiza a página de consulta de nome
+    return render_template('consultar_nome.html')
+
 @app.route('/youtube')
 def consultar_youtube():
     if not session.get('logged_in'):
