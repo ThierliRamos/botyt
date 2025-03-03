@@ -10,7 +10,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh; /* Para ocupar a altura total da tela */
-    background-color: #f8f9fa; /* Cor de fundo suave */
+    background-color: #424141; /* Cor de fundo suave */
 }
 
 header {
@@ -18,7 +18,7 @@ header {
     justify-content: center; /* Espaço entre logo e nav */
     align-items: center;
     padding: 10px 20px;
-    background-color: #ffffff; /* Cor de fundo do cabeçalho */
+    background-color: white; /* Cor de fundo do cabeçalho */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para o cabeçalho */
 }
 
@@ -53,6 +53,7 @@ main {
 }
 
 .centralizado {
+    color: white;
     text-align: center; /* Centraliza o texto */
     margin-bottom: 20px; /* Espaçamento abaixo do título */
 }
@@ -93,7 +94,7 @@ footer {
     text-align: center; /* Centraliza o texto */
     margin: 20px 0; /* Espaçamento acima e abaixo do texto */
     font-size: 18px; /* Aumenta o tamanho da fonte */
-    color: #333; /* Cor do texto */
+    color: white; /* Cor do texto */
 }
 
 
@@ -114,19 +115,3 @@ footer {
     text-transform: initial;
 }
 
-.help-button {
-    background-color: #28a745; /* Cor de fundo do botão */
-    color: white; /* Cor do texto do botão */
-    border: none;
-    border-radius: 5px;
-    padding: 15px; /* Aumenta o preenchimento do botão */
-    width: 300px; /* Largura fixa para o botão */
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-size: 16px; /* Aumenta o tamanho da fonte */
-    margin: 10px 0; /* Espaçamento acima e abaixo do botão */
-}
-
-.help-button:hover {
-    background-color: #218838; /* Cor ao passar o mouse */
-}
