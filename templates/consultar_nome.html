@@ -8,27 +8,27 @@
         body {
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #424141;
+            background-color: #f4f4f4;
             font-family: Arial, sans-serif;
         }
         .back-button {
             background-color: #28a745; /* Cor verde */
             color: white;            
-            padding: 10px; /* Ajuste para combinar com o estilo dos outros botões */
+            padding: 10px;            
             border-radius: 5px;            
-            text-decoration: none; /* Remove sublinhado do link */            
+            text-decoration: none;            
             font-size: 16px;            
-            margin-bottom: 20px; /* Espaçamento abaixo do botão */            
+            margin-bottom: 20px;  
+            margin-top: 50px;          
             transition: background-color 0.3s;        
-            text-align: center; /* Centraliza o texto */
-            width: 165px; /* Largura fixa */
-        }        
+            text-align: center;            
+            width: 165px;            
+        }
         .back-button:hover {            
-            background-color: #218838; /* Cor ao passar o mouse */        
+            background-color: #218838;        
         }
         .container {
             background-color: white;
@@ -37,7 +37,8 @@
             padding: 30px;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
             text-align: center;
-            width: 300px;
+            width: 400px; 
+            margin-bottom: 20px; /* Espaço abaixo da caixa */
         }
         h1 {
             font-size: 24px;
@@ -68,53 +69,78 @@
         .result {
             margin: 15px 0;
             color: #333;
-            text-align: left; /* Para alinhar à esquerda */
+            text-align: left; 
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            display: none; 
+            width: 400px; 
+            background-color: #fff; 
         }
         .error {
-            color: red; /* Cor para mensagens de erro */
+            color: red; 
+            display: none; 
         }
     </style>
 </head>
 <body>
 
-<button class="back-button" onclick="location.href='{{ url_for('main') }}'">Voltar para o Início</button> <!-- Botão de Voltar -->
+<button class="back-button">Voltar para o Início</button> 
 <div class="container">
-    <h1>Consulta Nome</h1>
-    <form id="nomeForm" action="/consultar_nome" method="POST">
+    <h1>Consultar Nome</h1>
+    <form id="nomeForm" onsubmit="pesquisarNome(); return false;">
         <input type="text" id="nome" name="nome" placeholder="Digite o nome" required>
-        <button type="submit">Consultar</button>
+        <button type="submit">Pesquisar</button>
     </form>
-
-    <div class="result" id="result"></div> <!-- Aqui será exibido o resultado da API -->
-    <div class="error" id="error-message"></div> <!-- Mensagem de erro -->
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div class="result" id="result"></div> 
+<div class="error" id="error"></div> 
+
 <script>
-    $(document).ready(function() {
-        $('#nomeForm').submit(function(event) {
-            event.preventDefault(); // Previne o envio padrão do formulário
-            const nome = $('#nome').val();
-            $('#result').html("🔎 Aguarde... Estou buscando!");
-            $('#error-message').html(""); // Limpa mensagens de erro anteriores
-            
-            $.post('/consultar_nome', { nome: nome })
-                .done(function(data) {
-                    if (data.status === "success") {
-                        // Iniciar o download
-                        window.location.href = '/download/' + nome;
-                    } else {
-                        $('#result').html(""); // Limpa resultados anteriores
-                        $('#error-message').html(data.message); // Exibe a mensagem de erro
-                    }
-                })
-                .fail(function(xhr) {
-                    const errorMessage = xhr.responseJSON ? xhr.responseJSON.message : '❌ Ocorreu um erro desconhecido.';
-                    $('#result').html(""); // Limpa resultados anteriores
-                    $('#error-message').html(errorMessage); // Exibe a mensagem de erro
-                });
-        });
-    });
+    function pesquisarNome() {
+        const nome = document.getElementById('nome').value;
+        const resultDiv = document.getElementById('result');
+        const errorDiv = document.getElementById('error');
+
+        // Limpar resultados e erros anteriores
+        resultDiv.style.display = 'none';
+        errorDiv.style.display = 'none';
+        resultDiv.innerHTML = '';
+        errorDiv.innerHTML = '';
+
+        if (!nome) {
+            errorDiv.innerHTML = 'Por favor, insira um nome.';
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        // URL da API com AllOrigins
+        const corsUrl = 'https://api.allorigins.win/get?url=';
+        const apiUrl = `http://api2.minerdapifoda.xyz:8080/api/nomes?nome=${encodeURIComponent(nome)}`;
+
+        // Realiza a requisição utilizando AllOrigins
+        fetch(corsUrl + encodeURIComponent(apiUrl))
+            .then(response => response.json())
+            .then(data => {
+                // A resposta da API está dentro de 'contents' quando se usa AllOrigins
+                const jsonData = JSON.parse(data.contents);
+                console.log("Resposta da API:", jsonData);
+
+                if (jsonData && jsonData.Resultado) {
+                    resultDiv.style.display = 'block';
+                    resultDiv.innerHTML = `<h3>Resultado da Pesquisa para "${nome}":</h3><pre>${jsonData.Resultado}</pre>`;
+                } else {
+                    errorDiv.innerHTML = 'Nenhum resultado encontrado.';
+                    errorDiv.style.display = 'block';
+                }
+            })
+            .catch(error => {
+                errorDiv.innerHTML = 'Erro ao buscar dados. Tente novamente.';
+                errorDiv.style.display = 'block';
+                console.error('Erro ao fazer a requisição:', error);
+            });
+    }
 </script>
 
 </body>
