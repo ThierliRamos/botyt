@@ -127,6 +127,7 @@ def consultar_cpf():
             return jsonify({'status': 'error', 'message': '❌ Ocorreu um erro ao consultar o CPF.'}), 500
 
     return render_template('cpf.html')
+    
 # CONSULTA TELEFONE
 @app.route('/consultar_tel', methods=['GET', 'POST'])
 def consultar_tel():
