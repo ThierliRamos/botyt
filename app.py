@@ -216,15 +216,15 @@ def download_nome(nome):
 
 @app.route('/youtube')
 # Verifica se o usuário está logado
-    if not session.get('logged_in'):
-        return redirect(url_for('home'))  # Redireciona para a página de login
+if not session.get('logged_in'):
+return redirect(url_for('home'))  # Redireciona para a página de login
 def consultar_youtube():
     return render_template('youtube.html')
 
 @app.route('/youtube2')
 # Verifica se o usuário está logado
-    if not session.get('logged_in'):
-        return redirect(url_for('home'))  # Redireciona para a página de login
+if not session.get('logged_in'):
+return redirect(url_for('home'))  # Redireciona para a página de login
 def consul_youtube2():
     return render_template('youtube2.html')
 
