@@ -82,7 +82,7 @@ main {
 }
 
 footer {
-    background-color: #f4f4f4;
+    background-color: white;
     text-align: center;
     padding: 15px;
     position: relative; /* Para manter o footer na parte inferior */
