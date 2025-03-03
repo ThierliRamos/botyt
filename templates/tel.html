@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta Telefone</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        .back-button {
+            background-color: #28a745; /* Cor verde */
+            color: white;            
+            padding: 10px; /* Ajuste para combinar com o estilo dos outros botões */
+            border-radius: 5px;            
+            text-decoration: none; /* Remove sublinhado do link */            
+            font-size: 16px;            
+            margin-bottom: 20px; /* Espaçamento abaixo do botão */            
+            transition: background-color 0.3s;        
+            text-align: center; /* Centraliza o texto */
+            width: 300px; /* Largura fixa */
+        }        
+        .back-button:hover {            
+            background-color: #218838; /* Cor ao passar o mouse */        
+        }
+        .container {
+            background-color: white;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 300px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .result {
+            margin: 15px 0;
+            color: #333;
+            text-align: left; /* Para alinhar à esquerda */
+        }
+    </style>
+</head>
+<body>
+
+<button class="back-button" onclick="location.href='{{ url_for('main') }}'">Voltar para o Início</button> <!-- Botão de Voltar -->
+<div class="container">
+    <h1>Consulta Telefone</h1>
+    <form id="telForm" action="/consultar_tel" method="post"> <!-- Ação do formulário -->
+        <input type="text" id="telefone" name="telefone" placeholder="Digite o Telefone" required>
+        <button type="submit">Consultar</button>
+    </form>
+    <div class="result" id="result"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#telForm').submit(function(event) {
+            event.preventDefault(); // Previne o envio padrão do formulário
+            const telefone = $('#telefone').val();
+            $('#result').html("🔎 Aguarde... Estou buscando!");
+            $.post('/consultar_tel', { telefone: telefone }, function(data) {
+                if (data.status === 'success') {
+                    $('#result').html(data.data);
+                } else {
+                    $('#result').html(data.message);
+                }
+            }).fail(function(xhr) {
+                const errorMessage = xhr.responseJSON ? xhr.responseJSON.message : '❌ Ocorreu um erro desconhecido.';
+                $('#result').html(errorMessage);
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
