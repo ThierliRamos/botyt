@@ -3,7 +3,6 @@ import os
 import requests
 import re
 from bin import verificar_bin
-import tempfile
 import io
 from ip import buscar_informacoes_ip
 from youtube import youtube_app
@@ -37,7 +36,7 @@ def login():
         print(f"Usuário {usuario} logado com sucesso.")
         return redirect(url_for('main'))
     else:
-        return "Usuário ou senha inválidos!"
+        return "Usuário ou senha inválidos!", 401  # Retorna uma resposta 401 para login inválido
 
 # Middleware para verificar se o usuário está logado
 @app.before_request
@@ -80,7 +79,7 @@ def consultar_cpf():
         try:
             response = requests.get(f'http://api2.minerdapifoda.xyz:8080/api/cpf3?cpf={cpf}')
             if response.status_code != 200:
-                return jsonify({'status': 'error', 'message': '❌ Não foi encontrado informações para o CPF informado.'}), 404
+                return jsonify({'status': 'error', 'message': '❌ Não foi encontrada informações para o CPF informado.'}), 404
             
             cpf_data = response.json().get('Resultado')
             resultados = {
@@ -115,7 +114,7 @@ def consultar_tel():
         try:
             response = requests.get(f'http://api2.minerdapifoda.xyz:8080/api/telefones2?telefone={telefone}')
             if response.status_code != 200:
-                return jsonify({'status': 'error', 'message': '❌ Não foi encontrado informações para o telefone informado.'}), 404
+                return jsonify({'status': 'error', 'message': '❌ Não foi encontrada informações para o telefone informado.'}), 404
             
             tel_data = response.json().get('Resultado')
             if isinstance(tel_data, dict):
