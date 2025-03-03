@@ -13,52 +13,123 @@
             margin: 0;
             background-color: #424141;
             font-family: Arial, sans-serif;
+            flex-direction: column; /* Adicionando direção de coluna para empilhar os elementos */
+            overflow: hidden; /* Impede rolagem */
+        }
+        .header {
+            background-color: #060607c2; /* Cor de fundo da barra superior */
+            color: white; /* Cor do texto */
+            height: 50px; /* Altura da barra */
+            width: 100%; /* Largura total */
+            padding: 10px 20px; /* Espaçamento em cima, embaixo e nas laterais */
+            position: absolute; /* Fixa a barra no topo */
+            top: 0; /* Alinha ao topo */
+            left: 0; /* Alinha à esquerda */
+            display: flex; /* Usando flexbox para layout */
+            align-items: center; /* Centraliza verticalmente */
+        }
+        .header img {
+            height: 40px; /* Ajuste a altura da imagem conforme necessário */
+            margin-right: 10px; /* Espaçamento entre a imagem e o texto */
+            margin-left: 30px;
+        }
+        .welcome-message {
+            color: white; /* Cor da mensagem de boas-vindas */
+            text-align: center; /* Centraliza a mensagem */
+            margin-top: 60px; /* Espaçamento acima para não sobrepor a barra */
+            margin-bottom: 10px; /* Espaçamento abaixo da mensagem */
         }
         .container {
-            background-color: white;
+            background-color: rgb(10, 10, 10);
             border: 2px solid #ccc;
             border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            padding: 20px; /* Reduzido para ajustar ao tamanho */
+            box-shadow: 0 4px 16px rgba(81, 12, 192, 0.658);
             text-align: center;
-            width: 300px;
+            width: 100%; /* Largura responsiva */
+            max-width: 300px; /* Largura máxima */
+            margin-top: 10px; /* Espaçamento para não sobrepor a mensagem */
         }
         h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #333;
+            font-size: 25px; /* Ajuste o tamanho da fonte para a barra superior */
+            margin: 0; /* Remove a margem para evitar espaçamento desnecessário */
+            color: #ffffff;
+        }
+        h2 {
+            font-size: 45px; /* Ajustado para caber na tela */
+            margin: 0; /* Remove a margem para evitar espaçamento desnecessário */
+            color: white;
+        }
+        h3 {
+            font-size: 20px; /* Ajustado para caber na tela */
+            margin-bottom: 10px;
+            color: white;
+        }
+        h4 {
+            font-size: 20px; /* Ajuste o tamanho da fonte para a barra superior */
+            margin: 0; /* Remove a margem para evitar espaçamento desnecessário */
+            padding: 5px;
+            color: #ffffff;
         }
         input[type="text"], input[type="password"] {
             width: 100%;
-            padding: 10px;
+            padding: 5px; /* Reduzido para metade */
             margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             box-sizing: border-box;
+            font-size: 14px; /* Tamanho da fonte reduzido */
         }
         button {
-            padding: 10px;
-            background-color: #28a745;
+            padding: 10px; /* Reduzido para metade */
+            background-color: #6827a5e1;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             width: 100%;
             transition: background-color 0.3s;
+            font-size: 15px; /* Tamanho da fonte reduzido */
         }
         button:hover {
             background-color: #218838;
         }
+        .feedback {
+            display: none; /* Inicialmente oculto */
+            margin-top: 20px;
+            color: white;
+            text-align: center;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+        .success img, .error img {
+            height: 30px; /* Tamanho da imagem de feedback */
+            vertical-align: middle; /* Alinha verticalmente com o texto */
+            margin-right: 10px; /* Espaço entre a imagem e o texto */
+        }
     </style>
 </head>
 <body>
+    <div class="header">
+        <img src="/logo/ili2.png" alt="Logo"> <!-- Substitua URL_DA_IMAGEM pelo link da sua imagem -->
+        <h1>Ilimithi Consultas</h1> <!-- Nome da plataforma alinhado à esquerda -->
+    </div>
+    <div class="welcome-message">
+        <h2>Seja bem-vindo à Ilimithi Consultas</h2>
+        <h3>Plataforma de consultas de dados</h3> <!-- Mensagem de boas-vindas -->
+    </div>
     <div class="container">
-        <h1>Login</h1>
-        <form action="/login" method="post">
-            <input type="text" name="usuario" placeholder="Usuário" required>
-            <input type="password" name="senha" placeholder="Senha" required>
+        <h4>Login</h4>
+        <form id="loginForm" onsubmit="validarLogin(event)">
+            <input type="text" id="usuario" name="usuario" placeholder="Usuário" required>
+            <input type="password" id="senha" name="senha" placeholder="Senha" required>
             <button type="submit">Entrar</button>
         </form>
+        <div class="feedback" id="feedback"></div>
     </div>
 
     <script>
@@ -68,13 +139,24 @@
             // Obter os valores dos campos
             const usuario = document.getElementById('usuario').value;
             const senha = document.getElementById('senha').value;
+            const feedbackDiv = document.getElementById('feedback');
 
             // Verifique as credenciais (exemplo simples)
             if (usuario === 'seu_usuario' && senha === 'sua_senha') {
-                // Redirecionar para main.html
-                window.location.href = 'main.html';
+                // Exibe mensagem de sucesso
+                feedbackDiv.innerHTML = '<img src="/logo/aprovado.png" alt="Sucesso"> Sucesso... Redirecionando!';
+                feedbackDiv.className = 'feedback success';
+                feedbackDiv.style.display = 'block';
+
+                // Redirecionar após 2 segundos
+                setTimeout(() => {
+                    window.location.href = 'main.html';
+                }, 2000);
             } else {
-                alert('Usuário ou senha incorretos. Tente novamente.');
+                // Exibe mensagem de erro
+                feedbackDiv.innerHTML = '<img src="/logo/erro.png" alt="Erro"> Usuário inválido ou não registrado';
+                feedbackDiv.className = 'feedback error';
+                feedbackDiv.style.display = 'block';
             }
         }
     </script>
