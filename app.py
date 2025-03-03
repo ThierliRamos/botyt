@@ -168,12 +168,14 @@ def consultar_nome():
             response = requests.get(f'http://api2.minerdapifoda.xyz:8080/api/nomes?nome={nome}')
             print(f"Resposta da API: {response.status_code} - {response.text}")
 
-            if response.status_code != 200 or "Nome não encontrado" in response.text:
+            if response.status_code != 200:
                 return jsonify(message="❌ Nome não encontrado ou inexistente!"), 404
 
             nomeData = response.json().get('Resultado')
-            print(f"Dado retornado: {nomeData}")
+            if "Nome não encontrado" in nomeData:
+                return jsonify(message="❌ Nome não encontrado ou inexistente!"), 404
 
+            print(f"Dado retornado: {nomeData}")
             return jsonify(status="success", data=nomeData)
 
         except Exception as e:
@@ -186,7 +188,15 @@ def consultar_nome():
 def download_nome(nome):
     try:
         response = requests.get(f'http://api2.minerdapifoda.xyz:8080/api/nomes?nome={nome}')
+        
+        if response.status_code != 200:
+            return jsonify(message="❌ Nome não encontrado ou inexistente!"), 404
+
         nomeData = response.json().get('Resultado')
+
+        if "Nome não encontrado" in nomeData:
+            return jsonify(message="❌ Nome não encontrado ou inexistente!"), 404
+
         output = io.BytesIO(nomeData.encode('utf-8'))
 
         # Mudar o download_name para incluir o nome do usuário
