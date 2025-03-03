@@ -129,7 +129,7 @@
 
                 if (jsonData && jsonData.Resultado) {
                     resultDiv.style.display = 'block';
-                    resultDiv.innerHTML = `<h3>Resultado da Pesquisa para "${nome}":</h3><pre>${jsonData.Resultado}</pre>`;
+                    resultDiv.innerHTML = `<h3>Resultado para: "${nome}":</h3><pre>${jsonData.Resultado}</pre>`;
                 } else {
                     errorDiv.innerHTML = 'Nenhum resultado encontrado.';
                     errorDiv.style.display = 'block';
