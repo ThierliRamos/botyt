@@ -93,6 +93,60 @@ def consultar_cpf():
 
     return render_template('cpf.html')
 
+@app.route('/consultar_tel', methods=['GET', 'POST'])
+def consultar_tel():
+    if request.method == 'POST':
+        telefone = request.form.get('telefone')
+        print(f"Consultando Telefone: {telefone}")  # Log do telefone que está sendo consultado
+        
+        if not telefone:
+            return jsonify({'status': 'error', 'message': '🤔 Cadê o Telefone?'}), 400
+
+        try:
+            # Chamada à API externa para consultar o telefone
+            response = requests.get(f'http://api2.minerdapifoda.xyz:8080/api/telefones2?telefone={telefone}')
+            print(f"Resposta da API: {response.status_code} - {response.text}")  # Log da resposta da API
+            
+            if response.status_code != 200:
+                return jsonify({'status': 'error', 'message': '❌ Não foi encontrado informações para o telefone informado.'}), 404
+            
+            tel_data = response.json().get('Resultado')
+            print("Estrutura de tel_data:", tel_data)  # Log da estrutura para depuração
+
+            # Acessando os dados de tel_data
+            if isinstance(tel_data, dict):
+                # Pegando a primeira tabela encontrada
+                primeira_tabela = next(iter(tel_data.values()), None)  # Pega a primeira tabela (lista)
+                
+                if primeira_tabela and isinstance(primeira_tabela, list) and primeira_tabela:
+                    tabela = primeira_tabela[0]  # Pega o primeiro item da lista
+                    mensagem = (
+                        f"<strong>Telefone Informado:</strong> {tabela['telefone']}<br><br>"
+                        f"<strong>📌 Dados Encontrados 📌</strong><br>"
+                        f"▸ <strong>Nome:</strong> {tabela['nome']}<br>"
+                        f"▸ <strong>CPF:</strong> {tabela['cpf']}<br>"
+                        f"▸ <strong>Tipo de Pessoa:</strong> {tabela['TIPO_PESSOA']}<br>"
+                        f"▸ <strong>Data Instalação:</strong> {tabela['DATA_INSTALACAO']}<br>"
+                        f"▸ <strong>Telefone Secundário:</strong> {tabela['telefone_sec']}<br>"
+                        f"▸ <strong>Rua:</strong> {tabela['rua']}<br>"
+                        f"▸ <strong>Bairro:</strong> {tabela['bairro']}<br>"
+                        f"▸ <strong>Número:</strong> {tabela['num']}<br>"
+                        f"▸ <strong>Complemento:</strong> {tabela['compl']}<br>"
+                        f"▸ <strong>Cep:</strong> {tabela['cep']}<br>"
+                        f"▸ <strong>UF:</strong> {tabela['uf']}<br><br>"
+                    )
+                    return jsonify({'status': 'success', 'data': mensagem}), 200
+
+                return jsonify({'status': 'error', 'message': '❌ Nenhum dado encontrado para o telefone informado.'}), 404
+
+            return jsonify({'status': 'error', 'message': '❌ Estrutura de dados inesperada.'}), 404
+
+        except Exception as e:
+            print(f"Erro ao consultar Telefone: {e}")  # Log do erro
+            return jsonify({'status': 'error', 'message': '❌ Ocorreu um erro ao consultar o telefone.'}), 500
+
+    return render_template('tel.html')  # Renderiza a página de consulta de telefone
+
 @app.route('/youtube')
 def consultar_youtube():
     return render_template('youtube.html')
