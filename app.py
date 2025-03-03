@@ -1,10 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_file, after_this_request
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_file
 import os
 import requests  # Importa a biblioteca requests
 import re  # Adiciona a importação do módulo re
 from bin import verificar_bin
-import tempfile
-import io
 from ip import buscar_informacoes_ip
 from youtube import youtube_app  # Importa a blueprint do youtube.py
 from youtube2 import youtube2_app  # Importa a blueprint do youtube2.py
@@ -26,7 +24,7 @@ def verificar_credenciais(usuario, senha):
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html')  # Renderiza a página de login
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -37,7 +35,7 @@ def login():
         print(f"Usuário {usuario} logado com sucesso.")  # Log do login
         return redirect(url_for('main'))
     else:
-        return "Usuário ou senha inválidos!"
+        return "Usuário ou senha inválidos!", 401  # Retorna erro 401 para login inválido
 
 # Middleware para verificar se o usuário está logado
 @app.before_request
@@ -202,6 +200,8 @@ def consultar_nome():
 
 @app.route('/download/<string:nome>', methods=['GET'])
 def download_nome(nome):
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona se não estiver logado
     try:
         response = requests.get(f'http://api2.minerdapifoda.xyz:8080/api/nomes?nome={nome}')
         nomeData = response.json().get('Resultado')
