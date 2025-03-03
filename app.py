@@ -76,9 +76,11 @@ def check_ip():
 def consultar_cpf():
     if not session.get('logged_in'):
         return redirect(url_for('home'))  # Redireciona se não estiver logado
+    
     if request.method == 'POST':
         cpf = request.form.get('cpf')
         print(f"Consultando CPF: {cpf}")  # Log do CPF que está sendo consultado
+        
         if not cpf:
             return jsonify({'status': 'error', 'message': '🤔 Cadê o CPF?'}), 400
 
@@ -91,12 +93,27 @@ def consultar_cpf():
                 return jsonify({'status': 'error', 'message': '❌ Não foi encontrado informações para o CPF informado.'}), 404
             
             cpf_data = response.json().get('Resultado')
-            resultados = {
-                'cpf': re.search(r'CPF:\s*([\d\-]+)', cpf_data).group(1),
-                'nome': re.search(r'Nome:\s*(.*)', cpf_data).group(1),
-                'sexo': re.search(r'Sexo:\s*(.*)', cpf_data).group(1),
-                'data_nascimento': re.search(r'Data de Nascimento:\s*(.*)', cpf_data).group(1)
-            }
+            print(f"Dados do CPF: {cpf_data}")  # Log dos dados recebidos
+            
+            # Inicializa um dicionário para armazenar os resultados
+            resultados = {}
+            
+            # Utiliza expressões regulares para extrair os dados
+            cpf_match = re.search(r'CPF:\s*([\d\-]+)', cpf_data)
+            nome_match = re.search(r'Nome:\s*(.*)', cpf_data)
+            sexo_match = re.search(r'Sexo:\s*(.*)', cpf_data)
+            data_nascimento_match = re.search(r'Data de Nascimento:\s*(.*)', cpf_data)
+
+            # Verifica se todas as correspondências foram feitas
+            if cpf_match and nome_match and sexo_match and data_nascimento_match:
+                resultados['cpf'] = cpf_match.group(1)
+                resultados['nome'] = nome_match.group(1)
+                resultados['sexo'] = sexo_match.group(1)
+                resultados['data_nascimento'] = data_nascimento_match.group(1)
+            else:
+                return jsonify({'status': 'error', 'message': '❌ Dados não encontrados para o CPF informado.'}), 404
+
+            # Cria a mensagem de resultado
             resultado_mensagem = (
                 f"CPF: {resultados['cpf']}\n"
                 f"Nome: {resultados['nome']}\n"
@@ -110,7 +127,6 @@ def consultar_cpf():
             return jsonify({'status': 'error', 'message': '❌ Ocorreu um erro ao consultar o CPF.'}), 500
 
     return render_template('cpf.html')
-
 # CONSULTA TELEFONE
 @app.route('/consultar_tel', methods=['GET', 'POST'])
 def consultar_tel():
