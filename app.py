@@ -1,20 +1,20 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_file, after_this_request
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import os
-import requests  # Importa a biblioteca requests
-import re  # Adiciona a importação do módulo re
+import requests
+import re
 from bin import verificar_bin
 import tempfile
 import io
 from ip import buscar_informacoes_ip
-from youtube import youtube_app  # Importa a blueprint do youtube.py
-from youtube2 import youtube2_app  # Importa a blueprint do youtube2.py
+from youtube import youtube_app
+from youtube2 import youtube2_app
 
 app = Flask(__name__)
 app.secret_key = 'uma_chave_secreta'
 
 # Registra as blueprints
-app.register_blueprint(youtube_app, url_prefix='/youtube')  # Registrar a blueprint do youtube
-app.register_blueprint(youtube2_app, url_prefix='/youtube2')  # Registrar a blueprint do youtube2
+app.register_blueprint(youtube_app, url_prefix='/youtube')
+app.register_blueprint(youtube2_app, url_prefix='/youtube2')
 
 def verificar_credenciais(usuario, senha):
     with open('usuarios.txt', 'r') as f:
@@ -34,10 +34,21 @@ def login():
     senha = request.form.get('senha')
     if verificar_credenciais(usuario, senha):
         session['logged_in'] = True
-        print(f"Usuário {usuario} logado com sucesso.")  # Log do login
+        print(f"Usuário {usuario} logado com sucesso.")
         return redirect(url_for('main'))
     else:
         return "Usuário ou senha inválidos!"
+
+# Middleware para verificar se o usuário está logado
+@app.before_request
+def require_login():
+    allowed_routes = ['home', 'login']  # Permite acesso a estas rotas sem login
+    if request.endpoint not in allowed_routes and not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona para a página de login
+
+@app.route('/main')
+def main():
+    return render_template('main.html')
 
 @app.route('/bin')
 def bin_page():
@@ -58,25 +69,16 @@ def check_ip():
     resultado = buscar_informacoes_ip(ip_address, is_dono=False, is_vip=True)
     return render_template('ip.html', message=resultado)
 
-# CONSULTA CPF
-
 @app.route('/consultar_cpf', methods=['GET', 'POST'])
 def consultar_cpf():
-    # Verifica se o usuário está logado
-    if not session.get('logged_in'):
-        return redirect(url_for('home'))  # Redireciona para a página de login
-
     if request.method == 'POST':
         cpf = request.form.get('cpf')
-        print(f"Consultando CPF: {cpf}")  # Log do CPF que está sendo consultado
+        print(f"Consultando CPF: {cpf}")
         if not cpf:
             return jsonify({'status': 'error', 'message': '🤔 Cadê o CPF?'}), 400
 
         try:
-            # Chamada à API externa para consultar o CPF
             response = requests.get(f'http://api2.minerdapifoda.xyz:8080/api/cpf3?cpf={cpf}')
-            print(f"Resposta da API: {response.status_code} - {response.text}")  # Log da resposta da API
-            
             if response.status_code != 200:
                 return jsonify({'status': 'error', 'message': '❌ Não foi encontrado informações para o CPF informado.'}), 404
             
@@ -96,45 +98,31 @@ def consultar_cpf():
             return jsonify({'status': 'success', 'data': resultado_mensagem}), 200
 
         except Exception as e:
-            print(f"Erro ao consultar CPF: {e}")  # Log do erro
+            print(f"Erro ao consultar CPF: {e}")
             return jsonify({'status': 'error', 'message': '❌ Ocorreu um erro ao consultar o CPF.'}), 500
-
-    return render_template('cpf.html')  # Renderiza a página de consulta de CPF
 
     return render_template('cpf.html')
 
-# CONSULTA TELEFONE
-
 @app.route('/consultar_tel', methods=['GET', 'POST'])
 def consultar_tel():
-    # Verifica se o usuário está logado
-    if not session.get('logged_in'):
-        return redirect(url_for('home'))  # Redireciona para a página de login
     if request.method == 'POST':
         telefone = request.form.get('telefone')
-        print(f"Consultando Telefone: {telefone}")  # Log do telefone que está sendo consultado
+        print(f"Consultando Telefone: {telefone}")
         
         if not telefone:
             return jsonify({'status': 'error', 'message': '🤔 Cadê o Telefone?'}), 400
 
         try:
-            # Chamada à API externa para consultar o telefone
             response = requests.get(f'http://api2.minerdapifoda.xyz:8080/api/telefones2?telefone={telefone}')
-            print(f"Resposta da API: {response.status_code} - {response.text}")  # Log da resposta da API
-            
             if response.status_code != 200:
                 return jsonify({'status': 'error', 'message': '❌ Não foi encontrado informações para o telefone informado.'}), 404
             
             tel_data = response.json().get('Resultado')
-            print("Estrutura de tel_data:", tel_data)  # Log da estrutura para depuração
-
-            # Acessando os dados de tel_data
             if isinstance(tel_data, dict):
-                # Pegando a primeira tabela encontrada
-                primeira_tabela = next(iter(tel_data.values()), None)  # Pega a primeira tabela (lista)
+                primeira_tabela = next(iter(tel_data.values()), None)
                 
                 if primeira_tabela and isinstance(primeira_tabela, list) and primeira_tabela:
-                    tabela = primeira_tabela[0]  # Pega o primeiro item da lista
+                    tabela = primeira_tabela[0]
                     mensagem = (
                         f"<strong>Telefone Informado:</strong> {tabela['telefone']}<br><br>"
                         f"<strong>📌 Dados Encontrados 📌</strong><br>"
@@ -157,20 +145,13 @@ def consultar_tel():
             return jsonify({'status': 'error', 'message': '❌ Estrutura de dados inesperada.'}), 404
 
         except Exception as e:
-            print(f"Erro ao consultar Telefone: {e}")  # Log do erro
+            print(f"Erro ao consultar Telefone: {e}")
             return jsonify({'status': 'error', 'message': '❌ Ocorreu um erro ao consultar o telefone.'}), 500
 
-    return render_template('tel.html')  # Renderiza a página de consulta de telefone
-
-# CONSULTA NOME
-
-# CONSULTA DE NOME
+    return render_template('tel.html')
 
 @app.route('/consultar_nome', methods=['GET', 'POST'])
 def consultar_nome():
-    # Verifica se o usuário está logado
-    if not session.get('logged_in'):
-        return redirect(url_for('home'))  # Redireciona para a página de login
     if request.method == 'POST':
         nome = request.form.get('nome')
         print(f"Consultando Nome: {nome}")
@@ -180,69 +161,22 @@ def consultar_nome():
 
         try:
             response = requests.get(f'http://api2.minerdapifoda.xyz:8080/api/nomes?nome={nome}')
-            print(f"Resposta da API: {response.status_code} - {response.text}")
-
             if response.status_code != 200 or "Nome não encontrado" in response.text:
                 return jsonify(message="❌ Nome não encontrado ou inexistente!"), 404
 
             nomeData = response.json().get('Resultado')
-            print(f"Dado retornado: {nomeData}")
-
             return jsonify(status="success", data=nomeData)
 
         except Exception as e:
             print(f"Erro ao consultar Nome: {e}")
             return jsonify(message="❌ Ocorreu um erro ao consultar o nome."), 500
 
-    return render_template('consultar_nome.html')  # Renderiza a página de consulta de nome
-
-@app.route('/download/<string:nome>', methods=['GET'])
-def download_nome(nome):
-    try:
-        response = requests.get(f'http://api2.minerdapifoda.xyz:8080/api/nomes?nome={nome}')
-        nomeData = response.json().get('Resultado')
-        output = io.BytesIO(nomeData.encode('utf-8'))
-
-        # Mudar o download_name para incluir o nome do usuário
-        return send_file(
-            output,
-            as_attachment=True,
-            download_name=f'{nome}_consulta.txt',  # Nome do arquivo personalizado
-            mimetype='text/plain'
-        )
-    except Exception as e:
-        print(f"Erro ao fazer download do nome: {e}")
-        return jsonify(message="❌ Ocorreu um erro ao fazer o download."), 500
-
-@app.route('/youtube')
-# Verifica se o usuário está logado
-if not session.get('logged_in'):
-return redirect(url_for('home'))  # Redireciona para a página de login
-def consultar_youtube():
-    return render_template('youtube.html')
-
-@app.route('/youtube2')
-# Verifica se o usuário está logado
-if not session.get('logged_in'):
-return redirect(url_for('home'))  # Redireciona para a página de login
-def consul_youtube2():
-    return render_template('youtube2.html')
-
-@app.route('/main')
-def main():
-    try:
-        print(f"Usuário está logado: {session.get('logged_in')}")  # Log do status da sessão
-        if not session.get('logged_in'):
-            return redirect(url_for('home'))
-        return render_template('main.html')
-    except Exception as e:
-        print(f"Erro ao acessar a página principal: {e}")  # Log do erro
-        return "Erro ao acessar a página principal.", 500
+    return render_template('consultar_nome.html')
 
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
-    print("Usuário deslogado.")  # Log do logout
+    print("Usuário deslogado.")
     return redirect(url_for('home'))
 
 if __name__ == '__main__':
