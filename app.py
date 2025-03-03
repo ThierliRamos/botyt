@@ -62,6 +62,10 @@ def check_ip():
 
 @app.route('/consultar_cpf', methods=['GET', 'POST'])
 def consultar_cpf():
+    # Verifica se o usuário está logado
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona para a página de login
+
     if request.method == 'POST':
         cpf = request.form.get('cpf')
         print(f"Consultando CPF: {cpf}")  # Log do CPF que está sendo consultado
@@ -94,6 +98,8 @@ def consultar_cpf():
         except Exception as e:
             print(f"Erro ao consultar CPF: {e}")  # Log do erro
             return jsonify({'status': 'error', 'message': '❌ Ocorreu um erro ao consultar o CPF.'}), 500
+
+    return render_template('cpf.html')  # Renderiza a página de consulta de CPF
 
     return render_template('cpf.html')
 
