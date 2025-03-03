@@ -107,6 +107,9 @@ def consultar_cpf():
 
 @app.route('/consultar_tel', methods=['GET', 'POST'])
 def consultar_tel():
+    # Verifica se o usuário está logado
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona para a página de login
     if request.method == 'POST':
         telefone = request.form.get('telefone')
         print(f"Consultando Telefone: {telefone}")  # Log do telefone que está sendo consultado
@@ -165,6 +168,9 @@ def consultar_tel():
 
 @app.route('/consultar_nome', methods=['GET', 'POST'])
 def consultar_nome():
+    # Verifica se o usuário está logado
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona para a página de login
     if request.method == 'POST':
         nome = request.form.get('nome')
         print(f"Consultando Nome: {nome}")
@@ -209,10 +215,16 @@ def download_nome(nome):
         return jsonify(message="❌ Ocorreu um erro ao fazer o download."), 500
 
 @app.route('/youtube')
+# Verifica se o usuário está logado
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona para a página de login
 def consultar_youtube():
     return render_template('youtube.html')
 
 @app.route('/youtube2')
+# Verifica se o usuário está logado
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona para a página de login
 def consul_youtube2():
     return render_template('youtube2.html')
 
