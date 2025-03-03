@@ -77,7 +77,7 @@
 </head>
 <body>
 
-<button class="back-button">Voltar para o Início</button> <!-- Botão de Voltar -->
+<button class="back-button" onclick="location.href='{{ url_for('main') }}'">Voltar para o Início</button> <!-- Botão de Voltar -->
 <div class="container">
     <h1>Consulta Nome</h1>
     <form id="nomeForm" action="/consultar_nome" method="POST">
