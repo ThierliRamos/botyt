@@ -3,7 +3,6 @@ import os
 import requests
 import re
 from bin import verificar_bin
-import io
 from ip import buscar_informacoes_ip
 from youtube import youtube_app
 from youtube2 import youtube2_app
@@ -47,29 +46,41 @@ def require_login():
 
 @app.route('/main')
 def main():
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona se não estiver logado
     return render_template('main.html')
 
 @app.route('/bin')
 def bin_page():
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona se não estiver logado
     return render_template('bin.html', message=None)
 
 @app.route('/check_bin', methods=['POST'])
 def check_bin():
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona se não estiver logado
     bin_number = request.form['bin']
     return verificar_bin(bin_number)
 
 @app.route('/ip')
 def ip_page():
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona se não estiver logado
     return render_template('ip.html', message=None)
 
 @app.route('/check_ip', methods=['POST'])
 def check_ip():
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona se não estiver logado
     ip_address = request.form.get('ip')
     resultado = buscar_informacoes_ip(ip_address, is_dono=False, is_vip=True)
     return render_template('ip.html', message=resultado)
 
 @app.route('/consultar_cpf', methods=['GET', 'POST'])
 def consultar_cpf():
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona se não estiver logado
     if request.method == 'POST':
         cpf = request.form.get('cpf')
         print(f"Consultando CPF: {cpf}")
@@ -104,6 +115,8 @@ def consultar_cpf():
 
 @app.route('/consultar_tel', methods=['GET', 'POST'])
 def consultar_tel():
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona se não estiver logado
     if request.method == 'POST':
         telefone = request.form.get('telefone')
         print(f"Consultando Telefone: {telefone}")
@@ -151,6 +164,8 @@ def consultar_tel():
 
 @app.route('/consultar_nome', methods=['GET', 'POST'])
 def consultar_nome():
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona se não estiver logado
     if request.method == 'POST':
         nome = request.form.get('nome')
         print(f"Consultando Nome: {nome}")
