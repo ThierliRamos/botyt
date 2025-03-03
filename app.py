@@ -56,6 +56,8 @@ def check_ip():
     resultado = buscar_informacoes_ip(ip_address, is_dono=False, is_vip=True)
     return render_template('ip.html', message=resultado)
 
+# CONSULTA CPF
+
 @app.route('/consultar_cpf', methods=['GET', 'POST'])
 def consultar_cpf():
     if request.method == 'POST':
@@ -92,6 +94,8 @@ def consultar_cpf():
             return jsonify({'status': 'error', 'message': '❌ Ocorreu um erro ao consultar o CPF.'}), 500
 
     return render_template('cpf.html')
+
+# CONSULTA TELEFONE
 
 @app.route('/consultar_tel', methods=['GET', 'POST'])
 def consultar_tel():
@@ -146,6 +150,55 @@ def consultar_tel():
             return jsonify({'status': 'error', 'message': '❌ Ocorreu um erro ao consultar o telefone.'}), 500
 
     return render_template('tel.html')  # Renderiza a página de consulta de telefone
+
+# CONSULTA NOME
+
+# CONSULTA DE NOME
+
+@app.route('/consultar_nome', methods=['GET', 'POST'])
+def consultar_nome():
+    if request.method == 'POST':
+        nome = request.form.get('nome')
+        print(f"Consultando Nome: {nome}")
+
+        if not nome:
+            return jsonify(message="🤔 Cadê o Nome?"), 400
+
+        try:
+            response = requests.get(f'http://api2.minerdapifoda.xyz:8080/api/nomes?nome={nome}')
+            print(f"Resposta da API: {response.status_code} - {response.text}")
+
+            if response.status_code != 200 or "Nome não encontrado" in response.text:
+                return jsonify(message="❌ Nome não encontrado ou inexistente!"), 404
+
+            nomeData = response.json().get('Resultado')
+            print(f"Dado retornado: {nomeData}")
+
+            return jsonify(status="success", data=nomeData)
+
+        except Exception as e:
+            print(f"Erro ao consultar Nome: {e}")
+            return jsonify(message="❌ Ocorreu um erro ao consultar o nome."), 500
+
+    return render_template('consultar_nome.html')  # Renderiza a página de consulta de nome
+
+@app.route('/download/<string:nome>', methods=['GET'])
+def download_nome(nome):
+    try:
+        response = requests.get(f'http://api2.minerdapifoda.xyz:8080/api/nomes?nome={nome}')
+        nomeData = response.json().get('Resultado')
+        output = io.BytesIO(nomeData.encode('utf-8'))
+
+        # Mudar o download_name para incluir o nome do usuário
+        return send_file(
+            output,
+            as_attachment=True,
+            download_name=f'{nome}_consulta.txt',  # Nome do arquivo personalizado
+            mimetype='text/plain'
+        )
+    except Exception as e:
+        print(f"Erro ao fazer download do nome: {e}")
+        return jsonify(message="❌ Ocorreu um erro ao fazer o download."), 500
 
 @app.route('/youtube')
 def consultar_youtube():
