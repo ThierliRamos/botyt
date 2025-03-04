@@ -13,7 +13,7 @@
             margin: 0;
             background-color: #424141;
             font-family: Arial, sans-serif;
-            flex-direction: column; /* Adicionando direção de coluna para empilhar os elementos */
+            flex-direction: column; /* Alinhar elementos em coluna */
             overflow: hidden; /* Impede rolagem */
         }
         .header {
@@ -22,7 +22,7 @@
             height: 50px; /* Altura da barra */
             width: 100%; /* Largura total */
             padding: 10px 20px; /* Espaçamento em cima, embaixo e nas laterais */
-            position: absolute; /* Fixa a barra no topo */
+            position: absolute; /* Fica fixo no topo */
             top: 0; /* Alinha ao topo */
             left: 0; /* Alinha à esquerda */
             display: flex; /* Usando flexbox para layout */
@@ -43,68 +43,68 @@
             background-color: rgb(10, 10, 10);
             border: 2px solid #ccc;
             border-radius: 10px;
-            padding: 20px; /* Reduzido para ajustar ao tamanho */
+            padding: 20px; /* Espaçamento interno */
             box-shadow: 0 4px 16px rgba(81, 12, 192, 0.658);
-            text-align: center;
+            text-align: center; /* Centraliza o conteúdo */
             width: 100%; /* Largura responsiva */
             max-width: 300px; /* Largura máxima */
             margin-top: 10px; /* Espaçamento para não sobrepor a mensagem */
         }
         h1 {
-            font-size: 25px; /* Ajuste o tamanho da fonte para a barra superior */
-            margin: 0; /* Remove a margem para evitar espaçamento desnecessário */
+            font-size: 25px; /* Tamanho da fonte do título */
+            margin: 0; /* Remove margens */
             color: #ffffff;
         }
         h2 {
-            font-size: 45px; /* Ajustado para caber na tela */
-            margin: 0; /* Remove a margem para evitar espaçamento desnecessário */
+            font-size: 45px; /* Tamanho da fonte da mensagem de boas-vindas */
+            margin: 0; /* Remove margens */
             color: white;
         }
         h3 {
-            font-size: 20px; /* Ajustado para caber na tela */
-            margin-bottom: 10px;
+            font-size: 20px; /* Tamanho da fonte da descrição */
+            margin-bottom: 10px; /* Espaçamento abaixo */
             color: white;
         }
         h4 {
-            font-size: 20px; /* Ajuste o tamanho da fonte para a barra superior */
-            margin: 0; /* Remove a margem para evitar espaçamento desnecessário */
-            padding: 5px;
+            font-size: 20px; /* Tamanho da fonte do título do formulário */
+            margin: 0; /* Remove margens */
+            padding: 5px; /* Espaçamento interno */
             color: #ffffff;
         }
         input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 5px; /* Reduzido para metade */
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 14px; /* Tamanho da fonte reduzido */
+            width: 100%; /* Largura total do campo */
+            padding: 5px; /* Espaçamento interno */
+            margin-bottom: 10px; /* Espaçamento abaixo */
+            border: 1px solid #ccc; /* Borda do campo */
+            border-radius: 5px; /* Bordas arredondadas */
+            box-sizing: border-box; /* Inclui padding e bordas na largura total */
+            font-size: 14px; /* Tamanho da fonte */
         }
         button {
-            padding: 10px; /* Reduzido para metade */
-            background-color: #6827a5e1;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            transition: background-color 0.3s;
-            font-size: 15px; /* Tamanho da fonte reduzido */
+            padding: 10px; /* Espaçamento interno */
+            background-color: #6827a5e1; /* Cor de fundo do botão */
+            color: white; /* Cor do texto do botão */
+            border: none; /* Remove bordas */
+            border-radius: 5px; /* Bordas arredondadas */
+            cursor: pointer; /* Cursor de ponteiro ao passar o mouse */
+            width: 100%; /* Largura total do botão */
+            transition: background-color 0.3s; /* Efeito de transição */
+            font-size: 15px; /* Tamanho da fonte */
         }
         button:hover {
-            background-color: #218838;
+            background-color: #218838; /* Cor ao passar o mouse */
         }
         .feedback {
             display: none; /* Inicialmente oculto */
-            margin-top: 20px;
-            color: white;
-            text-align: center;
+            margin-top: 20px; /* Espaçamento acima */
+            color: white; /* Cor do feedback */
+            text-align: center; /* Centraliza o texto */
         }
         .success {
-            color: green;
+            color: green; /* Cor para mensagens de sucesso */
         }
         .error {
-            color: red;
+            color: red; /* Cor para mensagens de erro */
         }
         .success img, .error img {
             height: 30px; /* Tamanho da imagem de feedback */
@@ -115,8 +115,8 @@
 </head>
 <body>
     <div class="header">
-        <img src="/logo/ili2.png" alt="Logo"> <!-- Substitua URL_DA_IMAGEM pelo link da sua imagem -->
-        <h1>Ilimithi Consultas</h1> <!-- Nome da plataforma alinhado à esquerda -->
+        <img src="{{ url_for('static', filename='logo/ili2.png') }}" alt="Logo"> <!-- Caminho da imagem -->
+        <h1>Ilimithi Consultas</h1> <!-- Nome da plataforma -->
     </div>
     <div class="welcome-message">
         <h2>Seja bem-vindo à Ilimithi Consultas</h2>
@@ -129,36 +129,54 @@
             <input type="password" id="senha" name="senha" placeholder="Senha" required>
             <button type="submit">Entrar</button>
         </form>
-        <div class="feedback" id="feedback"></div>
+        <div class="feedback" id="feedback"></div> <!-- Div para mensagens de feedback -->
     </div>
 
     <script>
-        function validarLogin(event) {
-            event.preventDefault(); // Impede o envio do formulário
+        async function validarLogin(event) {
+    event.preventDefault(); // Impede o envio do formulário
 
-            // Obter os valores dos campos
-            const usuario = document.getElementById('usuario').value;
-            const senha = document.getElementById('senha').value;
-            const feedbackDiv = document.getElementById('feedback');
+    // Obter os valores dos campos
+    const usuario = document.getElementById('usuario').value;
+    const senha = document.getElementById('senha').value;
+    const feedbackDiv = document.getElementById('feedback');
 
-            // Verifique as credenciais (exemplo simples)
-            if (usuario === 'seu_usuario' && senha === 'sua_senha') {
-                // Exibe mensagem de sucesso
-                feedbackDiv.innerHTML = '<img src="/logo/aprovado.png" alt="Sucesso"> Sucesso... Redirecionando!';
-                feedbackDiv.className = 'feedback success';
-                feedbackDiv.style.display = 'block';
+    // Fazer a requisição ao servidor
+    try {
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `usuario=${encodeURIComponent(usuario)}&senha=${encodeURIComponent(senha)}`
+        });
 
-                // Redirecionar após 2 segundos
-                setTimeout(() => {
-                    window.location.href = 'main.html';
-                }, 2000);
-            } else {
-                // Exibe mensagem de erro
-                feedbackDiv.innerHTML = '<img src="/logo/erro.png" alt="Erro"> Usuário inválido ou não registrado';
-                feedbackDiv.className = 'feedback error';
-                feedbackDiv.style.display = 'block';
-            }
+        // Verifica se a resposta é válida
+        const result = await response.json(); // Tenta converter a resposta em JSON
+
+        if (response.ok) { // Verifica se a resposta foi bem-sucedida
+            // Exibe mensagem de sucesso
+            feedbackDiv.innerHTML = '<img src="{{ url_for("static", filename="logo/aprovado.png") }}" alt="Sucesso"> Sucesso... Redirecionando!';
+            feedbackDiv.className = 'feedback success';
+            feedbackDiv.style.display = 'block';
+
+            // Redirecionar após 2 segundos
+            setTimeout(() => {
+                window.location.href = '/main'; // Redireciona para a página principal
+            }, 2000);
+        } else { // Se a resposta não for ok
+            // Exibe mensagem de erro
+            feedbackDiv.innerHTML = '<img src="{{ url_for("static", filename="logo/erro.png") }}" alt="Erro"> Usuário inválido ou não registrado';
+            feedbackDiv.className = 'feedback error';
+            feedbackDiv.style.display = 'block';
         }
+    } catch (error) {
+        console.error('Erro ao fazer a requisição:', error); // Log de erro
+        feedbackDiv.innerHTML = '<img src="{{ url_for("static", filename="logo/erro.png") }}" alt="Erro"> Ocorreu um erro ao tentar fazer login.';
+        feedbackDiv.className = 'feedback error';
+        feedbackDiv.style.display = 'block';
+    }
+}
     </script>
 </body>
 </html>
