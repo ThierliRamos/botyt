@@ -7,13 +7,11 @@
     <style>
         body {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            flex-direction: column; /* Alinhar elementos em coluna */
+            min-height: 100vh; /* Garante que o body ocupe toda a altura da tela */
             margin: 0;
             background-color: #424141;
             font-family: Arial, sans-serif;
-            flex-direction: column; /* Alinhar elementos em coluna */
             overflow: hidden; /* Impede rolagem */
         }
         .header {
@@ -22,9 +20,7 @@
             height: 50px; /* Altura da barra */
             width: 100%; /* Largura total */
             padding: 10px 20px; /* Espaçamento em cima, embaixo e nas laterais */
-            position: absolute; /* Fica fixo no topo */
-            top: 0; /* Alinha ao topo */
-            left: 0; /* Alinha à esquerda */
+            position: relative; /* Fica fixo no topo */
             display: flex; /* Usando flexbox para layout */
             align-items: center; /* Centraliza verticalmente */
         }
@@ -36,7 +32,7 @@
         .welcome-message {
             color: white; /* Cor da mensagem de boas-vindas */
             text-align: center; /* Centraliza a mensagem */
-            margin-top: 14%; /* Espaçamento acima para não sobrepor a barra */
+            margin-top: 20px; /* Ajustar para não sobrepor a barra */
             margin-bottom: 10px; /* Espaçamento abaixo da mensagem */
         }
         .container {
@@ -48,7 +44,10 @@
             text-align: center; /* Centraliza o conteúdo */
             width: 100%; /* Largura responsiva */
             max-width: 300px; /* Largura máxima */
-            margin-top: 10px; /* Espaçamento para não sobrepor a mensagem */
+            max-height: 200px;
+            margin: 10px auto; /* Centraliza e adiciona espaçamento */
+            flex: 1; /* Faz a container ocupar o espaço restante */
+            overflow: hidden; /* Impede rolagem interna */
         }
         h1 {
             font-size: 25px; /* Tamanho da fonte do título */
@@ -111,16 +110,16 @@
             vertical-align: middle; /* Alinha verticalmente com o texto */
             margin-right: 10px; /* Espaço entre a imagem e o texto */
         }
-         footer {
-    background-color: #060607c2;
-    width: 100%;
-    text-align: center;
-    padding: 5px;
-    position: relative; /* Para manter o footer na parte inferior */
-    margin-top: auto; /* Para empurrar o rodapé para baixo */
-    color: #949292;
-    text-decoration: dotted;
-}
+        footer {
+            background-color: #060607c2;
+            width: 100%;
+            text-align: center;
+            padding: 5px;
+            color: #949292;
+            text-decoration: dotted;
+            position: relative; /* Para manter o footer na parte inferior */
+            margin-top: auto; /* Para empurrar o rodapé para baixo */
+        }
     </style>
 </head>
 <body>
@@ -148,49 +147,49 @@
 
     <script>
         async function validarLogin(event) {
-    event.preventDefault(); // Impede o envio do formulário
+            event.preventDefault(); // Impede o envio do formulário
 
-    // Obter os valores dos campos
-    const usuario = document.getElementById('usuario').value;
-    const senha = document.getElementById('senha').value;
-    const feedbackDiv = document.getElementById('feedback');
+            // Obter os valores dos campos
+            const usuario = document.getElementById('usuario').value;
+            const senha = document.getElementById('senha').value;
+            const feedbackDiv = document.getElementById('feedback');
 
-    // Fazer a requisição ao servidor
-    try {
-        const response = await fetch('/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `usuario=${encodeURIComponent(usuario)}&senha=${encodeURIComponent(senha)}`
-        });
+            // Fazer a requisição ao servidor
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `usuario=${encodeURIComponent(usuario)}&senha=${encodeURIComponent(senha)}`
+                });
 
-        // Verifica se a resposta é válida
-        const result = await response.json(); // Tenta converter a resposta em JSON
+                // Verifica se a resposta é válida
+                const result = await response.json(); // Tenta converter a resposta em JSON
 
-        if (response.ok) { // Verifica se a resposta foi bem-sucedida
-            // Exibe mensagem de sucesso
-            feedbackDiv.innerHTML = '<img src="{{ url_for("static", filename="logo/aprovado.png") }}" alt="Sucesso"> Sucesso... Redirecionando!';
-            feedbackDiv.className = 'feedback success';
-            feedbackDiv.style.display = 'block';
+                if (response.ok) { // Verifica se a resposta foi bem-sucedida
+                    // Exibe mensagem de sucesso
+                    feedbackDiv.innerHTML = '<img src="{{ url_for("static", filename="logo/aprovado.png") }}" alt="Sucesso"> Sucesso... Redirecionando!';
+                    feedbackDiv.className = 'feedback success';
+                    feedbackDiv.style.display = 'block';
 
-            // Redirecionar após 2 segundos
-            setTimeout(() => {
-                window.location.href = '/main'; // Redireciona para a página principal
-            }, 2000);
-        } else { // Se a resposta não for ok
-            // Exibe mensagem de erro
-            feedbackDiv.innerHTML = '<img src="{{ url_for("static", filename="logo/erro.png") }}" alt="Erro"> Usuário inválido ou não registrado';
-            feedbackDiv.className = 'feedback error';
-            feedbackDiv.style.display = 'block';
+                    // Redirecionar após 2 segundos
+                    setTimeout(() => {
+                        window.location.href = '/main'; // Redireciona para a página principal
+                    }, 2000);
+                } else { // Se a resposta não for ok
+                    // Exibe mensagem de erro
+                    feedbackDiv.innerHTML = '<img src="{{ url_for("static", filename="logo/erro.png") }}" alt="Erro"> Usuário inválido ou não registrado';
+                    feedbackDiv.className = 'feedback error';
+                    feedbackDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Erro ao fazer a requisição:', error); // Log de erro
+                feedbackDiv.innerHTML = '<img src="{{ url_for("static", filename="logo/erro.png") }}" alt="Erro"> Ocorreu um erro ao tentar fazer login.';
+                feedbackDiv.className = 'feedback error';
+                feedbackDiv.style.display = 'block';
+            }
         }
-    } catch (error) {
-        console.error('Erro ao fazer a requisição:', error); // Log de erro
-        feedbackDiv.innerHTML = '<img src="{{ url_for("static", filename="logo/erro.png") }}" alt="Erro"> Ocorreu um erro ao tentar fazer login.';
-        feedbackDiv.className = 'feedback error';
-        feedbackDiv.style.display = 'block';
-    }
-}
     </script>
 </body>
 </html>
