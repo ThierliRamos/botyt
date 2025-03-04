@@ -29,10 +29,8 @@ header {
 
 h1 {
     color: #f4f4f4;
-    margin-top: 22px;
     text-align: center;
     font-size: 30px;
-    margin-top: 5px;
 }
 
 main {
@@ -47,8 +45,14 @@ main {
     text-align: center; /* Centraliza o texto */
     margin-bottom: 20px; /* Espaçamento abaixo do título */
     color: #f4f4f4;
-    margin-top: 30px;
     font-size: 25px;
+}
+
+.service-buttons {
+    display: flex;
+    flex-direction: column; /* Coloca os botões em coluna */
+    align-items: center; /* Centraliza os botões */
+    width: 100%; /* Garante que ocupe toda a largura */
 }
 
 .service-buttons button {
@@ -67,26 +71,9 @@ main {
     background-color: #40027ae1; /* Cor ao passar o mouse (ajuste para um tom mais escuro) */
 }
 
-.download-box button {
-    background-color: #6827a5e1; /* Cor de fundo do botão */
-    color: white; /* Cor do texto do botão */
-    border: none;
-    border-radius: 5px;
-    margin: 5px;
-    padding: 15px; /* Aumenta o preenchimento do botão */
-    width: 100%; /* Largura total da caixa */
-    transition: background-color 0.3s;
-    font-size: 16px; /* Aumenta o tamanho da fonte */
-}
-
-.download-box button:hover {
-    background-color: #40027ae1; /* Cor ao passar o mouse */
-    text-transform: initial;
-}
-
 .card-group {
     display: flex; /* Usar flexbox para organizar os cards dentro do grupo */
-    justify-content: space-between; /* Espaça os cards uniformemente dentro do grupo */
+    justify-content: center; /* Centraliza os cards dentro do grupo */
     flex-wrap: wrap; /* Permite que os cards se movam para a linha seguinte se não houver espaço */
     margin: 0; /* Margem entre os grupos de cards */
     width: 100%; /* Garante que o grupo ocupe toda a largura disponível */
@@ -122,7 +109,6 @@ main {
     font-size: 16px; /* Ajusta o tamanho da fonte do botão */
     padding: 10px; /* Ajusta o preenchimento do botão */
     width: 100%; /* Botão ocupa toda a largura do card */
-    margin-top: 10px; /* Espaçamento acima do botão */
 }
 
 .download-text {
@@ -152,7 +138,11 @@ main {
     .background-text {
         height: 30px; /* Ajusta a altura do fundo em telas pequenas */
         width: 70%;
-        margin-left: 60px;
+        margin: 0 auto; /* Centraliza horizontalmente */
+    }
+
+    .card {
+        flex: 1 1 calc(100% - 20px); /* Largura total em dispositivos móveis */
     }
 }
 
@@ -170,14 +160,5 @@ footer {
 @media (max-width: 992px) {
     .card {
         flex: 1 1 calc(45% - 20px); /* Largura para dispositivos menores (2 cards por linha) */
-    }
-}
-
-@media (max-width: 600px) {
-    .card {
-        flex: 1 1 100%; /* Largura para dispositivos móveis (1 card por linha) */
-        align-items: center;
-        justify-content: center;
-        margin-left: 100px;
     }
 }
