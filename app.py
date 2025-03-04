@@ -1,11 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_file
 import os
 import requests  # Importa a biblioteca requests
+import yt_dlp
 import re  # Adiciona a importação do módulo re
 from bin import verificar_bin
 from ip import buscar_informacoes_ip
-from youtube import youtube_app  # Importa a blueprint do youtube.py
-from youtube2 import youtube2_app  # Importa a blueprint do youtube2.py
 
 app = Flask(__name__)
 app.secret_key = 'uma_chave_secreta'
