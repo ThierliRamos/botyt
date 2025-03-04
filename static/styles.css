@@ -11,7 +11,7 @@ body {
     flex-direction: column;
     min-height: 100vh; /* Para ocupar a altura total da tela */
     background-color: #424141; /* Cor de fundo suave */
-    background-image: url('/static/logo/light3.jpg'); /* Adicione o caminho da sua imagem aqui */
+    background-image: url('/static/logo/3d.jpg'); /* Adicione o caminho da sua imagem aqui */
     background-size: cover; /* Faz a imagem cobrir toda a área disponível */
     background-position: center; /* Centraliza a imagem */
     background-repeat: no-repeat; /* Evita que a imagem se repita */
