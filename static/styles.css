@@ -11,6 +11,10 @@ body {
     flex-direction: column;
     min-height: 100vh; /* Para ocupar a altura total da tela */
     background-color: #424141; /* Cor de fundo suave */
+    background-image: url('/static/logo/light3.jpg'); /* Adicione o caminho da sua imagem aqui */
+    background-size: cover; /* Faz a imagem cobrir toda a área disponível */
+    background-position: center; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Evita que a imagem se repita */
 }
 
 header {
@@ -18,30 +22,13 @@ header {
     justify-content: center; /* Espaço entre logo e nav */
     align-items: center;
     padding: 10px 20px;
-    background-color: white; /* Cor de fundo do cabeçalho */
+    background-color: #060607c2; /* Cor de fundo do cabeçalho */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para o cabeçalho */
+    height: 70px;
 }
 
-.nav-buttons ul {
-    display: flex;
-    list-style-type: none; /* Remove marcadores da lista */
-}
-
-.nav-buttons li {
-    margin-left: 20px; /* Espaçamento entre os itens do menu */
-}
-
-.nav-buttons a {
-    text-decoration: none; /* Remove sublinhado do link */
-    padding: 10px 15px;
-    background-color: #28a745; /* Cor de fundo verde */
-    color: white;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.nav-buttons a:hover {
-    background-color: #218838; /* Cor ao passar o mouse */
+h1 {
+    color: #f4f4f4;
 }
 
 main {
@@ -53,21 +40,14 @@ main {
 }
 
 .centralizado {
-    color: white;
     text-align: center; /* Centraliza o texto */
     margin-bottom: 20px; /* Espaçamento abaixo do título */
-}
-
-.service-buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centraliza os botões na coluna */
-    gap: 15px; /* Aumenta o espaçamento entre os botões */
+    color: #f4f4f4;
 }
 
 .service-buttons button {
     padding: 15px; /* Aumenta o preenchimento */
-    background-color: #28a745; /* Cor de fundo dos botões */
+    background-color: #6827a5e1; /* Cor de fundo dos botões */
     color: white; /* Cor do texto dos botões */
     border: none;
     border-radius: 5px;
@@ -78,40 +58,115 @@ main {
 }
 
 .service-buttons button:hover {
-    background-color: #218838; /* Cor ao passar o mouse */
+    background-color: #40027ae1; /* Cor ao passar o mouse (ajuste para um tom mais escuro) */
 }
-
-footer {
-    background-color: white;
-    text-align: center;
-    padding: 15px;
-    position: relative; /* Para manter o footer na parte inferior */
-    margin-top: auto; /* Para empurrar o rodapé para baixo */
-    border-top: 1px solid #ccc; /* Linha acima do rodapé */
-}
-
-.download-text {
-    text-align: center; /* Centraliza o texto */
-    margin: 20px 0; /* Espaçamento acima e abaixo do texto */
-    font-size: 18px; /* Aumenta o tamanho da fonte */
-    color: white; /* Cor do texto */
-}
-
 
 .download-box button {
-    background-color: #050505; /* Cor de fundo do botão */
+    background-color: #6827a5e1; /* Cor de fundo do botão */
     color: white; /* Cor do texto do botão */
     border: none;
     border-radius: 5px;
-    padding: 15px; /* Aumenta o preenchimento do botão */
     margin: 5px;
+    padding: 15px; /* Aumenta o preenchimento do botão */
     width: 100%; /* Largura total da caixa */
     transition: background-color 0.3s;
     font-size: 16px; /* Aumenta o tamanho da fonte */
 }
 
 .download-box button:hover {
-    background-color: #218838; /* Cor ao passar o mouse */
+    background-color: #40027ae1; /* Cor ao passar o mouse */
     text-transform: initial;
 }
 
+.card-group {
+    display: flex; /* Usar flexbox para organizar os cards dentro do grupo */
+    justify-content: space-between; /* Espaça os cards uniformemente dentro do grupo */
+    flex-wrap: wrap; /* Permite que os cards se movam para a linha seguinte se não houver espaço */
+    margin: 0; /* Margem entre os grupos de cards */
+    width: 100%; /* Garante que o grupo ocupe toda a largura disponível */
+}
+
+.card {
+    display: flex; /* Habilita o uso de flexbox */
+    flex-direction: column; /* Organiza o conteúdo na vertical */
+    justify-content: space-between; /* Distribui o espaço entre o conteúdo e o botão */
+    border: 1px solid #ccc; /* Borda leve */
+    border-radius: 8px; /* Bordas arredondadas */
+    padding: 10px; /* Preenchimento interno */
+    margin: 10px; /* Margem entre os cards */
+    text-align: center; /* Centraliza o texto */
+    background-color: #fff; /* Cor de fundo dos cards */
+    color: #333; /* Cor do texto */
+    flex: 1 1 calc(30% - 20px); /* Flexível com base na largura da tela */
+    max-width: 300px; /* Limita a largura máxima do card */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra leve para dar profundidade */
+    transition: transform 0.2s; /* Transição suave para o efeito de hover */
+}
+
+.card:hover {
+    transform: scale(1.05); /* Aumenta ligeiramente o card ao passar o mouse */
+}
+
+.card p {
+    margin: 10px 0; /* Espaçamento acima e abaixo das descrições reduzido */
+}
+
+.card button {
+    margin-top: auto; /* Move o botão para a parte inferior do card */
+    font-size: 16px; /* Ajusta o tamanho da fonte do botão */
+    padding: 10px; /* Ajusta o preenchimento do botão */
+    width: 100%; /* Botão ocupa toda a largura do card */
+    margin-top: 10px; /* Espaçamento acima do botão */
+}
+
+.download-text {
+    text-align: center; /* Centraliza o texto */
+    margin: 20px 0; /* Espaçamento acima e abaixo do texto */
+    font-size: 25px; /* Tamanho da fonte padrão */
+    color: #6827a5e1; /* Cor do texto */
+    width: 100%; /* Largura total para garantir que se ajuste */
+}
+
+.background-text {
+    display: block; /* Garante que o fundo ocupe toda a largura */
+    background-color: #f0f0f0; /* Cor de fundo desejada */
+    width: 100%; /* Largura de 100% */
+    height: 35px; /* Altura do fundo */
+    margin: 10px 0; /* Margem acima e abaixo do fundo */
+    border-radius: 7px;
+}
+
+/* Media Queries para ajustar o tamanho do texto em telas menores */
+@media (max-width: 600px) {
+    .download-text {
+        font-size: 20px; /* Tamanho da fonte menor em telas pequenas */
+        margin: 15px 0; /* Menor margem em telas pequenas */
+    }
+
+    .background-text {
+        height: 30px; /* Ajusta a altura do fundo em telas pequenas */
+    }
+}
+
+footer {
+    background-color: #060607c2;
+    text-align: center;
+    padding: 15px;
+    position: relative; /* Para manter o footer na parte inferior */
+    margin-top: auto; /* Para empurrar o rodapé para baixo */
+    color: #949292;
+    text-decoration: dotted;
+}
+
+/* Media Queries para Responsividade */
+@media (max-width: 992px) {
+    .card {
+        flex: 1 1 calc(45% - 20px); /* Largura para dispositivos menores (2 cards por linha) */
+    }
+}
+
+@media (max-width: 600px) {
+    .card {
+        flex: 1 1 100%; /* Largura para dispositivos móveis (1 card por linha) */
+    }
+}
