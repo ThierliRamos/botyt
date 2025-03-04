@@ -30,12 +30,13 @@ def home():
 def login():
     usuario = request.form.get('usuario')
     senha = request.form.get('senha')
+
     if verificar_credenciais(usuario, senha):
         session['logged_in'] = True
         print(f"Usuário {usuario} logado com sucesso.")  # Log do login
-        return redirect(url_for('main'))
+        return jsonify(success=True)  # Retorna sucesso em formato JSON
     else:
-        return "Usuário ou senha inválidos!", 401  # Retorna erro 401 para login inválido
+        return jsonify(success=False, message="Usuário ou senha inválidos!"), 401  # Retorna erro 401 para login inválido
 
 # Middleware para verificar se o usuário está logado
 @app.before_request
