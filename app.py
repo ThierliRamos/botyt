@@ -286,6 +286,74 @@ def download_video():
         print(f"Erro: {str(e)}")
         return Response(f"Erro: {str(e)}", status=500)
 
+@app.route('/youtube2/download_audio', methods=['POST'])
+def download_audio():
+    if not session.get('logged_in'):
+        return redirect(url_for('home'))  # Redireciona se não estiver logado
+
+    url = request.form['url']
+    api_key = "AIzaSyBhhYrfqfkvGfzyCYxyGEp57nENmTwaigw"  # Sua chave da API
+
+    # Função para extrair o ID do vídeo da URL
+    def extrair_id_video(url):
+        match = re.search(r'(?:(?<=watch\?v=)|(?:youtu\.be/))([a-zA-Z0-9_-]{11})', url)
+        if match:
+            return match.group(1)
+        else:
+            raise ValueError("URL inválida ou ID do vídeo não encontrado.")
+
+    # Função para buscar o título do vídeo usando a API do YouTube
+    def buscar_video(api_key, video_id):
+        url = f"https://www.googleapis.com/youtube/v3/videos?id={video_id}&key={api_key}&part=snippet,contentDetails"
+        response = requests.get(url)
+        data = response.json()
+        
+        if 'items' in data and len(data['items']) > 0:
+            video_info = data['items'][0]['snippet']
+            title = video_info['title']
+            return title
+        else:
+            return None
+
+    try:
+        video_id = extrair_id_video(url)
+        titulo = buscar_video(api_key, video_id)
+
+        if titulo:
+            # Configurações do yt-dlp para baixar apenas o áudio
+            ydl_opts = {
+                'format': 'bestaudio/best',  # Baixar o melhor formato de áudio disponível
+                'noplaylist': True,  # Evitar baixar playlists
+                'quiet': True,  # Não exibir log no console
+                'postprocessors': [{
+                    'key': 'FFmpegExtractAudio',
+                    'preferredformat': 'mp3',  # Garantir que o formato seja MP3
+                }],
+            }
+
+            # Função para realizar o download do áudio
+            def generate():
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    # Extraindo a URL do áudio
+                    info_dict = ydl.extract_info(f"https://www.youtube.com/watch?v={video_id}", download=False)
+                    audio_url = info_dict['url']
+
+                    # Baixar e enviar o áudio
+                    with requests.get(audio_url, stream=True) as r:
+                        r.raise_for_status()  # Levanta um erro se a requisição falhar
+                        for chunk in r.iter_content(chunk_size=8192):
+                            yield chunk
+
+            return Response(generate(), 
+                            content_type='audio/mpeg', 
+                            headers={'Content-Disposition': f'attachment; filename="{titulo}.mp3"'})
+        else:
+            return Response("Áudio não encontrado ou não disponível.", status=404)
+
+    except Exception as e:
+        print(f"Erro: {str(e)}")  # Log do erro
+        return Response(f"Erro: {str(e)}", status=500)
+
 if __name__ == '__main__':
     app.run(debug=True)
 
