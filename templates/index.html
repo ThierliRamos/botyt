@@ -13,7 +13,7 @@
             background-color: #424141;
             font-family: Arial, sans-serif;
             overflow: hidden; /* Impede rolagem */
-            background-image: url('/static/logo/light4.jpg');
+            
         }
         .header {
             background-color: #060607c2; /* Cor de fundo da barra superior */
@@ -111,6 +111,15 @@
             vertical-align: middle; /* Alinha verticalmente com o texto */
             margin-right: 10px; /* Espaço entre a imagem e o texto */
         }
+        footer {
+            background-color: #060607c2;
+            text-align: center;
+            padding: 15px;
+            color: #949292;
+            text-decoration: dotted;
+            position: relative; /* Para manter o footer na parte inferior */
+            margin-top: auto; /* Para empurrar o rodapé para baixo */
+        }
     </style>
 </head>
 <body>
@@ -131,6 +140,10 @@
         </form>
         <div class="feedback" id="feedback"></div> <!-- Div para mensagens de feedback -->
     </div>
+
+    <footer>
+        <p>Copyright © 2025 Ilimithi. Todos os direitos reservados.</p>
+    </footer>
 
     <script>
         async function validarLogin(event) {
