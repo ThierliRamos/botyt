@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vídeo do YouTube</title>
+    <title>Áudio do YouTube</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -69,9 +69,9 @@
 <body>
     <button class="back-button" onclick="location.href='{{ url_for('main') }}'">Voltar para o Início</button> <!-- Botão de Voltar -->
     <div class="container">
-        <h1>Baixe Vídeos do YouTube</h1>
+        <h1>Baixe Áudio do YouTube</h1>
         <input type="text" id="url" placeholder="Cole a URL do vídeo aqui">
-        <button id="download-btn">Baixar Vídeo</button>
+        <button id="download-btn">Baixar Áudio</button>
         <div class="message" id="status-message" style="display:none;"></div>
     </div>
 
@@ -81,11 +81,11 @@
             const statusMessage = document.getElementById('status-message');
 
             // Mostrar a mensagem de status
-            statusMessage.textContent = 'Baixando o Vídeo. Aguarde...';
+            statusMessage.textContent = 'Baixando o Áudio. Aguarde...';
             statusMessage.style.display = 'block';
 
             // Usar fetch para fazer a requisição
-            fetch('/youtube2/download_video', {
+            fetch('/youtube2/download_audio', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -102,18 +102,24 @@
             .then(blob => {
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);  // Criar o objeto URL a partir do blob
-                link.download = 'video.mp4'; // Nome padrão do arquivo
+                link.download = 'audio.mp3'; // Nome padrão do arquivo
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
 
-                // Remover a mensagem de status após o download
-                statusMessage.textContent = '';
-                statusMessage.style.display = 'none';
+                // Após 2 segundos, atualizar a mensagem de status
+                setTimeout(() => {
+                    statusMessage.textContent = 'Download Concluído!'; // Mensagem de conclusão
+                }, 2000); // 2000 milissegundos = 2 segundos
+
+                // Remover a mensagem após 6 segundos (2 segundos de espera e 6 segundos de exibição)
+                setTimeout(() => {
+                    statusMessage.style.display = 'none'; // Remover a mensagem
+                }, 6000); // 6000 milissegundos = 6 segundos
             })
             .catch(error => {
                 console.error('Erro:', error);
-                alert('Erro ao baixar o vídeo: ' + error.message);
+                alert('Erro ao baixar o áudio: ' + error.message);
 
                 // Remover a mensagem de status em caso de erro
                 statusMessage.textContent = '';
