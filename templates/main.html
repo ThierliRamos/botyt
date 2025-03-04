@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bem-vindo ao DownCrazy</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
     <header>
@@ -17,22 +17,57 @@
         <section id="outros">
             <h2 class="centralizado">Nossos Serviços</h2>
             <div class="service-buttons">
-                <button onclick="location.href='{{ url_for('bin_page') }}'"><b>Consultar BIN</b></button>
-                <button onclick="location.href='{{ url_for('consultar_cpf') }}'"><b>Consultar CPF</b></button> <!-- Atualizado -->
-                <button onclick="location.href='{{ url_for('consultar_tel') }}'"><b>Consultar Telefone</b></button>
-                <button onclick="location.href='{{ url_for('consultar_nome') }}'"><b>Consultar Nome</b></button>
-                <button onclick="location.href='{{ url_for('ip_page') }}'"><b>Consultar IP</b></button>
+                <div class="card-group">
+                    <div class="card">
+                        <p>Verifique a validade de um número BIN.</p>
+                        <button onclick="location.href='{{ url_for('bin_page') }}'"><b>Consultar BIN</b></button>
+                    </div>
+                    <div class="card">
+                        <p>Consulte informações associadas a um CPF.</p>
+                        <button onclick="location.href='{{ url_for('consultar_cpf') }}'"><b>Consultar CPF</b></button>
+                    </div>
+                    <div class="card">
+                        <p>Descubra informações sobre um número de Telefone.</p>
+                        <button onclick="location.href='{{ url_for('consultar_tel') }}'"><b>Consultar Telefone</b></button>
+                    </div>
+                </div>
+                <div class="card-group">
+                    <div class="card">
+                        <p>Busque dados a partir de um Nome.</p>
+                        <button onclick="location.href='{{ url_for('consultar_nome') }}'"><b>Consultar Nome</b></button>
+                    </div>
+                    <div class="card">
+                        <p>Obtenha informações sobre um endereço IP.</p>
+                        <button onclick="location.href='{{ url_for('ip_page') }}'"><b>Consultar IP</b></button>
+                    </div>
+                </div>
             </div>
-            <p class="download-text">👇🏼 <b>Baixe músicas do YouTube</b> 👇🏼</p>
-            <div class="download-box">
-                <button onclick="location.href='{{ url_for('consultar_youtube') }}'"><b>Baixar Músicas</b></button>
-                <button onclick="location.href='{{ url_for('consul_youtube2') }}'"><b>Baixar Vídeos</b></button>
+
+            <p class="download-text">
+                <span class="background-text"><b>Baixe músicas do YouTube</b></span>
+            </p>
+            
+            <div class="service-buttons">
+                <div class="card-group">
+                    <div class="card">
+                        <p>Faça download de músicas diretamente.</p>
+                        <button onclick="location.href='{{ url_for('consultar_youtube') }}'"><b>Baixar Músicas</b></button>
+                    </div>
+                    <div class="card">
+                        <p>Baixe vídeos do YouTube facilmente.</p>
+                        <button onclick="location.href='{{ url_for('consul_youtube2') }}'"><b>Baixar Vídeos</b></button>
+                    </div>
+                    <div class="card">
+                        <p>Baixe listas do YouTube.</p>
+                        <button onclick="consultar('Baixar Vídeos')"><b>Baixar Listas</b></button>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2025 DownCrazy. Todos os direitos reservados.</p>
+        <p>Copyright © 2025 Ilimithi. Todos os direitos reservados.</p>
     </footer>
 
     <script>
