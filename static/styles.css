@@ -29,6 +29,10 @@ header {
 
 h1 {
     color: #f4f4f4;
+    margin-top: 22px;
+    text-align: center;
+    font-size: 30px;
+    margin-top: 5px;
 }
 
 main {
@@ -43,6 +47,8 @@ main {
     text-align: center; /* Centraliza o texto */
     margin-bottom: 20px; /* Espaçamento abaixo do título */
     color: #f4f4f4;
+    margin-top: 30px;
+    font-size: 25px;
 }
 
 .service-buttons button {
@@ -145,6 +151,8 @@ main {
 
     .background-text {
         height: 30px; /* Ajusta a altura do fundo em telas pequenas */
+        width: 70%;
+        margin-left: 60px;
     }
 }
 
@@ -168,5 +176,8 @@ footer {
 @media (max-width: 600px) {
     .card {
         flex: 1 1 100%; /* Largura para dispositivos móveis (1 card por linha) */
+        align-items: center;
+        justify-content: center;
+        margin-left: 100px;
     }
 }
