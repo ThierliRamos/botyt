@@ -46,6 +46,7 @@ main {
     margin-bottom: 20px; /* Espaçamento abaixo do título */
     color: #f4f4f4;
     font-size: 25px;
+    margin-top: 40px; /* Aumentar o espaçamento acima */
 }
 
 .service-buttons {
@@ -62,7 +63,8 @@ main {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 300px; /* Largura fixa para todos os botões */
+    width: 80%; /* Largura responsiva para os botões */
+    max-width: 300px; /* Largura máxima para os botões */
     transition: background-color 0.3s;
     font-size: 16px; /* Aumenta o tamanho da fonte */
 }
@@ -143,6 +145,7 @@ main {
 
     .card {
         flex: 1 1 calc(100% - 20px); /* Largura total em dispositivos móveis */
+        margin: 5px; /* Margem reduzida para evitar overflow */
     }
 }
 
