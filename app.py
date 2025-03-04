@@ -223,17 +223,76 @@ def consultar_nome():
     # Renderiza a página de consulta de nome
     return render_template('consultar_nome.html')
 
-@app.route('/youtube')
-def consultar_youtube():
-    if not session.get('logged_in'):
-        return redirect(url_for('home'))  # Redireciona se não estiver logado
-    return render_template('youtube.html')
+# BAIXAR VIDEO YOUTUBE
 
-@app.route('/youtube2')
-def consul_youtube2():
+@app.route('/youtube2/download_video', methods=['POST'])
+def download_video():
     if not session.get('logged_in'):
         return redirect(url_for('home'))  # Redireciona se não estiver logado
-    return render_template('youtube2.html')
+
+    url = request.form['url']
+    api_key = "AIzaSyBhhYrfqfkvGfzyCYxyGEp57nENmTwaigw"  # Sua chave da API
+
+    # Função para extrair o ID do vídeo da URL
+    def extrair_id_video(url):
+        match = re.search(r'(?:(?<=watch\?v=)|(?:youtu\.be/))([a-zA-Z0-9_-]{11})', url)
+        if match:
+            return match.group(1)
+        else:
+            raise ValueError("URL inválida ou ID do vídeo não encontrado.")
+
+    # Função para buscar o título do vídeo usando a API do YouTube
+    def buscar_video(api_key, video_id):
+        url = f"https://www.googleapis.com/youtube/v3/videos?id={video_id}&key={api_key}&part=snippet,contentDetails"
+        response = requests.get(url)
+        data = response.json()
+        
+        if 'items' in data and len(data['items']) > 0:
+            video_info = data['items'][0]['snippet']
+            title = video_info['title']
+            return title
+        else:
+            return None
+
+    try:
+        video_id = extrair_id_video(url)
+        titulo = buscar_video(api_key, video_id)
+
+        if titulo:
+            # Configurações do yt-dlp
+            ydl_opts = {
+                'format': 'best',
+                'noplaylist': True,
+                'quiet': True,
+                'postprocessors': [{
+                    'key': 'FFmpegVideoConvertor',
+                    'preferedformat': 'mp4',
+                }],
+            }
+
+            # Função para realizar o download do vídeo
+            def generate():
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    info_dict = ydl.extract_info(f"https://www.youtube.com/watch?v={video_id}", download=False)
+                    video_url = info_dict['url']
+
+                    with requests.get(video_url, stream=True) as r:
+                        r.raise_for_status()
+                        for chunk in r.iter_content(chunk_size=8192):
+                            yield chunk
+
+            return Response(generate(), 
+                            content_type='video/mp4', 
+                            headers={'Content-Disposition': f'attachment; filename="{titulo}.mp4"'})
+        else:
+            return Response("Vídeo não encontrado ou não disponível.", status=404)
+
+    except Exception as e:
+        print(f"Erro: {str(e)}")
+        return Response(f"Erro: {str(e)}", status=500)
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 @app.route('/main')
 def main():
