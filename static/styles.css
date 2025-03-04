@@ -25,7 +25,6 @@ header {
     background-color: #060607c2; /* Cor de fundo do cabeçalho */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para o cabeçalho */
     height: 70px;
-    margin-top: 20px;
 }
 
 h1 {
@@ -129,6 +128,14 @@ main {
     height: 35px; /* Altura do fundo */
     margin: 10px 0; /* Margem acima e abaixo do fundo */
     border-radius: 7px;
+}
+
+ /* Estilo adicional para a imagem */
+ .centralized-image {
+    display: block;
+    margin: 20px auto; /* Centraliza a imagem e adiciona espaçamento */
+    max-width: 100%; /* Garante que a imagem não ultrapasse a largura do contêiner */
+    height: auto; /* Mantém a proporção da imagem */
 }
 
 /* Media Queries para ajustar o tamanho do texto em telas menores */
