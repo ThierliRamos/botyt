@@ -45,7 +45,7 @@
         .welcome-message {
             color: white; /* Cor da mensagem de boas-vindas */
             text-align: center; /* Centraliza a mensagem */
-            margin: 20px 0 10px; /* Ajustar para não sobrepor a barra */
+            margin: 20px 0; /* Ajustar para não sobrepor a barra */
         }
 
         .container {
@@ -55,11 +55,10 @@
             padding: 20px; /* Espaçamento interno */
             box-shadow: 0 4px 16px rgba(81, 12, 192, 0.658);
             text-align: center; /* Centraliza o conteúdo */
-            width: 80%; /* Largura responsiva */
-            max-width: 280px; /* Largura máxima ajustada */
+            width: 90%; /* Largura responsiva */
+            max-width: 400px; /* Aumentar a largura máxima do contêiner */
             margin: 20px auto; /* Centraliza e adiciona espaçamento */
-            flex: 1; /* Faz a container ocupar o espaço restante */
-            overflow: hidden; /* Impede rolagem interna */
+            flex: 0; /* Evita que o contêiner ocupe espaço excessivo */
         }
 
         h1 {
@@ -134,12 +133,12 @@
             background-color: #060607c2;
             width: 100%;
             text-align: center;
-            padding: 5px;
+            padding: 10px;
             color: #949292;
             text-decoration: dotted;
             position: relative; /* Para manter o footer na parte inferior */
             margin-top: auto; /* Para empurrar o rodapé para baixo */
-            margin-bottom: 10px; /* Aumentar a margem inferior para espaçamento */
+            margin-bottom: 0px; /* Aumentar a margem inferior para espaçamento */
         }
 
         /* Media Queries para dispositivos móveis */
@@ -155,9 +154,8 @@
             }
             .container {
                 padding: 15px; /* Reduzir o padding do contêiner em dispositivos móveis */
-                width: 80%; /* Aumentar a largura máxima em dispositivos móveis */
+                width: 90%; /* Ajustar largura máxima em dispositivos móveis */
                 max-width: 90%; /* Ajustar largura máxima */
-                max-height: 250px;
             }
             button {
                 font-size: 14px; /* Tamanho da fonte dos botões menor em dispositivos móveis */
