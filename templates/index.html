@@ -13,7 +13,9 @@
             background-color: #424141;
             font-family: Arial, sans-serif;
             overflow: hidden; /* Impede rolagem */
-            
+            background-image: url('/static/logo/light4.jpg');
+            background-size: cover; /* Faz a imagem cobrir toda a área */
+            background-position: center; /* Centraliza a imagem */
         }
         .header {
             background-color: #060607c2; /* Cor de fundo da barra superior */
@@ -21,7 +23,6 @@
             height: 50px; /* Altura da barra */
             width: 100%; /* Largura total */
             padding: 10px 20px; /* Espaçamento em cima, embaixo e nas laterais */
-            position: relative; /* Fica fixo no topo */
             display: flex; /* Usando flexbox para layout */
             align-items: center; /* Centraliza verticalmente */
         }
@@ -33,7 +34,7 @@
         .welcome-message {
             color: white; /* Cor da mensagem de boas-vindas */
             text-align: center; /* Centraliza a mensagem */
-            margin-top: 40px; /* Ajustar para não sobrepor a barra */
+            margin-top: 20px; /* Ajustar para não sobrepor a barra */
             margin-bottom: 10px; /* Espaçamento abaixo da mensagem */
         }
         .container {
@@ -43,11 +44,10 @@
             padding: 20px; /* Espaçamento interno */
             box-shadow: 0 4px 16px rgba(81, 12, 192, 0.658);
             text-align: center; /* Centraliza o conteúdo */
-            width: 100%; /* Largura responsiva */
+            width: 90%; /* Largura responsiva */
             max-width: 300px; /* Largura máxima */
-            max-height: 200px;
-            margin: 10px auto; /* Centraliza e adiciona espaçamento */
-            flex: 1; /* Faz a container ocupar o espaço restante */
+            height: 200px; /* Definindo altura fixa para o contêiner */
+            margin: 20px auto; /* Centraliza e adiciona espaçamento */
             overflow: hidden; /* Impede rolagem interna */
         }
         h1 {
@@ -100,26 +100,6 @@
             color: white; /* Cor do feedback */
             text-align: center; /* Centraliza o texto */
         }
-        .success {
-            color: green; /* Cor para mensagens de sucesso */
-        }
-        .error {
-            color: red; /* Cor para mensagens de erro */
-        }
-        .success img, .error img {
-            height: 30px; /* Tamanho da imagem de feedback */
-            vertical-align: middle; /* Alinha verticalmente com o texto */
-            margin-right: 10px; /* Espaço entre a imagem e o texto */
-        }
-        footer {
-            background-color: #060607c2;
-            text-align: center;
-            padding: 15px;
-            color: #949292;
-            text-decoration: dotted;
-            position: relative; /* Para manter o footer na parte inferior */
-            margin-top: auto; /* Para empurrar o rodapé para baixo */
-        }
     </style>
 </head>
 <body>
@@ -140,10 +120,6 @@
         </form>
         <div class="feedback" id="feedback"></div> <!-- Div para mensagens de feedback -->
     </div>
-
-    <footer>
-        <p>Copyright © 2025 Ilimithi. Todos os direitos reservados.</p>
-    </footer>
 
     <script>
         async function validarLogin(event) {
