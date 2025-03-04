@@ -125,7 +125,7 @@
 </head>
 <body>
     <div class="header">
-        <img src="{{ url_for('static', filename='logo/ili2.png') }}" alt="Logo"> <!-- Caminho da imagem -->
+        <img src="/static/logo/ili2.png" alt="Logo"> <!-- Caminho da imagem -->
         <h1>Ilimithi Consultas</h1> <!-- Nome da plataforma -->
     </div>
     <div class="welcome-message">
@@ -170,7 +170,7 @@
 
                 if (response.ok) { // Verifica se a resposta foi bem-sucedida
                     // Exibe mensagem de sucesso
-                    feedbackDiv.innerHTML = '<img src="{{ url_for("static", filename="logo/aprovado.png") }}" alt="Sucesso"> Sucesso... Redirecionando!';
+                    feedbackDiv.innerHTML = '<img src="/static/logo/aprovado.png" alt="Sucesso"> Sucesso... Redirecionando!';
                     feedbackDiv.className = 'feedback success';
                     feedbackDiv.style.display = 'block';
 
@@ -180,13 +180,13 @@
                     }, 2000);
                 } else { // Se a resposta não for ok
                     // Exibe mensagem de erro
-                    feedbackDiv.innerHTML = '<img src="{{ url_for("static", filename="logo/erro.png") }}" alt="Erro"> Usuário inválido ou não registrado';
+                    feedbackDiv.innerHTML = '<img src="/static/logo/erro.png" alt="Erro"> Usuário inválido ou não registrado';
                     feedbackDiv.className = 'feedback error';
                     feedbackDiv.style.display = 'block';
                 }
             } catch (error) {
                 console.error('Erro ao fazer a requisição:', error); // Log de erro
-                feedbackDiv.innerHTML = '<img src="{{ url_for("static", filename="logo/erro.png") }}" alt="Erro"> Ocorreu um erro ao tentar fazer login.';
+                feedbackDiv.innerHTML = '<img src="/static/logo/erro.png" alt="Erro"> Ocorreu um erro ao tentar fazer login.';
                 feedbackDiv.className = 'feedback error';
                 feedbackDiv.style.display = 'block';
             }
