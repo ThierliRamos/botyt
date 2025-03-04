@@ -25,6 +25,7 @@ header {
     background-color: #060607c2; /* Cor de fundo do cabeçalho */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para o cabeçalho */
     height: 70px;
+    margin-top: 20px;
 }
 
 h1 {
@@ -146,6 +147,9 @@ main {
     .card {
         flex: 1 1 calc(100% - 20px); /* Largura total em dispositivos móveis */
         margin: 5px; /* Margem reduzida para evitar overflow */
+    }
+    .header {
+        margin-top: 20px;
     }
 }
 
