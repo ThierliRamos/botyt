@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
+        /* Reset básico para garantir que o estilo seja aplicado uniformemente */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             display: flex;
             flex-direction: column; /* Alinhar elementos em coluna */
@@ -13,8 +20,12 @@
             background-color: #424141;
             font-family: Arial, sans-serif;
             background-image: url('/static/logo/light4.jpg');
-            overflow: hidden; /* Impede rolagem */
+            background-size: cover; /* Faz a imagem cobrir toda a área disponível */
+            background-position: center; /* Centraliza a imagem */
+            background-repeat: no-repeat; /* Evita que a imagem se repita */
+            overflow-y: auto; /* Permite rolagem vertical quando necessário */
         }
+
         .header {
             background-color: #060607c2; /* Cor de fundo da barra superior */
             color: white; /* Cor do texto */
@@ -24,17 +35,19 @@
             display: flex; /* Usando flexbox para layout */
             align-items: center; /* Centraliza verticalmente */
         }
+
         .header img {
             height: 40px; /* Ajuste a altura da imagem conforme necessário */
             margin-right: 10px; /* Espaçamento entre a imagem e o texto */
             margin-left: 30px;
         }
+
         .welcome-message {
             color: white; /* Cor da mensagem de boas-vindas */
             text-align: center; /* Centraliza a mensagem */
-            margin-top: 20px; /* Ajustar para não sobrepor a barra */
-            margin-bottom: 10px; /* Espaçamento abaixo da mensagem */
+            margin: 20px 0 10px; /* Ajustar para não sobrepor a barra */
         }
+
         .container {
             background-color: rgb(10, 10, 10);
             border: 2px solid #ccc;
@@ -44,32 +57,32 @@
             text-align: center; /* Centraliza o conteúdo */
             width: 80%; /* Largura responsiva */
             max-width: 280px; /* Largura máxima ajustada */
-            max-height: 200px; /* Limitar a altura do contêiner */
             margin: 20px auto; /* Centraliza e adiciona espaçamento */
             flex: 1; /* Faz a container ocupar o espaço restante */
             overflow: hidden; /* Impede rolagem interna */
         }
+
         h1 {
             font-size: 15px; /* Tamanho da fonte do título */
-            margin: 0; /* Remove margens */
             color: #ffffff;
         }
+
         h2 {
             font-size: 30px; /* Tamanho da fonte da mensagem de boas-vindas */
-            margin: 0; /* Remove margens */
             color: white;
         }
+
         h3 {
             font-size: 18px; /* Tamanho da fonte da descrição */
-            margin-bottom: 10px; /* Espaçamento abaixo */
             color: white;
         }
+
         h4 {
             font-size: 20px; /* Tamanho da fonte do título do formulário */
-            margin: 0; /* Remove margens */
             padding: 5px; /* Espaçamento interno */
             color: #ffffff;
         }
+
         input[type="text"], input[type="password"] {
             width: 100%; /* Largura total do campo */
             padding: 10px; /* Espaçamento interno */
@@ -79,6 +92,7 @@
             box-sizing: border-box; /* Inclui padding e bordas na largura total */
             font-size: 14px; /* Tamanho da fonte */
         }
+
         button {
             padding: 10px; /* Espaçamento interno */
             background-color: #6827a5e1; /* Cor de fundo do botão */
@@ -90,26 +104,32 @@
             transition: background-color 0.3s; /* Efeito de transição */
             font-size: 15px; /* Tamanho da fonte */
         }
+
         button:hover {
             background-color: #218838; /* Cor ao passar o mouse */
         }
+
         .feedback {
             display: none; /* Inicialmente oculto */
             margin-top: 20px; /* Espaçamento acima */
             color: white; /* Cor do feedback */
             text-align: center; /* Centraliza o texto */
         }
+
         .success {
             color: green; /* Cor para mensagens de sucesso */
         }
+
         .error {
             color: red; /* Cor para mensagens de erro */
         }
+
         .success img, .error img {
             height: 30px; /* Tamanho da imagem de feedback */
             vertical-align: middle; /* Alinha verticalmente com o texto */
             margin-right: 10px; /* Espaço entre a imagem e o texto */
         }
+
         footer {
             background-color: #060607c2;
             width: 100%;
@@ -119,6 +139,7 @@
             text-decoration: dotted;
             position: relative; /* Para manter o footer na parte inferior */
             margin-top: auto; /* Para empurrar o rodapé para baixo */
+            margin-bottom: 10px; /* Aumentar a margem inferior para espaçamento */
         }
 
         /* Media Queries para dispositivos móveis */
@@ -127,15 +148,16 @@
                 padding: 10px 10px; /* Reduzir o padding em telas menores */
             }
             h2 {
-                font-size: 30px; /* Tamanho da fonte do título menor em dispositivos móveis */
+                font-size: 24px; /* Tamanho da fonte do título menor em dispositivos móveis */
             }
             h3 {
                 font-size: 17px; /* Tamanho da fonte da descrição menor em dispositivos móveis */
             }
             .container {
-                padding: 20px; /* Reduzir o padding do contêiner em dispositivos móveis */
-                max-width: 50%; /* Aumentar a largura máxima em dispositivos móveis */
-                max-height: 200px;
+                padding: 15px; /* Reduzir o padding do contêiner em dispositivos móveis */
+                width: 80%; /* Aumentar a largura máxima em dispositivos móveis */
+                max-width: 90%; /* Ajustar largura máxima */
+                max-height: 250px;
             }
             button {
                 font-size: 14px; /* Tamanho da fonte dos botões menor em dispositivos móveis */
