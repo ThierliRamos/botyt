@@ -85,7 +85,7 @@
 </head>
 <body>
 
-<button class="back-button">Voltar para o Início</button> 
+<button class="back-button" onclick="location.href='{{ url_for('main') }}'">Voltar para o Início</button> <!-- Botão de Voltar --> 
 <div class="container">
     <h1>Consultar Nome</h1>
     <form id="nomeForm" onsubmit="pesquisarNome(); return false;">
