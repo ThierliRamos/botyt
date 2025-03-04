@@ -1,182 +1,125 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download de Vídeos do YouTube</title>
+    <title>Vídeo do YouTube</title>
     <style>
         body {
-            display: flex;
-            flex-direction: column; /* Permite que os elementos sejam empilhados verticalmente */
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #424141;
             font-family: Arial, sans-serif;
-        }
-        .container {
-            background-color: white;
-            border: 2px solid #ccc;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            width: 300px;
-            margin-bottom: 20px; /* Espaço abaixo da caixa */
+            background-color: #f4f4f4;
+            padding: 20px;
         }
         h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #333;
+            text-align: center;
         }
-        input[type="text"], select {
+        .container {
+            max-width: 300px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex; /* Usar flexbox para centrar o conteúdo */
+            flex-direction: column; /* Organizar elementos em coluna */
+            align-items: center; /* Centralizar os itens horizontalmente */
+        }
+        input[type="text"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
+            border-radius: 4px;
         }
         button {
+            width: 80%; /* Largura do botão */
             padding: 10px;
-            background-color: #28a745; /* Cor do botão */
+            background-color: #6827a5e1;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
-            width: 100%;
-            transition: background-color 0.3s;
+            margin-bottom: 10px; /* Espaço entre os botões */
+            margin-top: 20px;
         }
         button:hover {
-            background-color: #218838; /* Cor do botão ao passar o mouse */
-        }
-        .message {
-            margin: 15px 0;
-            color: #333;
-            font-weight: bold;
-            text-align: left;
-        }
-        #progress-container {
-            width: 100%;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            margin-top: 10px;
-            display: none;
-            overflow: hidden;
-            position: relative;
-        }
-        #progress-bar {
-            height: 20px;
-            width: 0;
-            background-color: #28a745;
-            border-radius: 5px;
-            transition: width 0.1s;
-        }
-        #progress-text {
-            position: absolute;
-            width: 100%;
-            text-align: center;
-            line-height: 20px;
-            color: white;
+            background-color: #5300a1e1;
         }
         .back-button {
-            background-color: #28a745; /* Cor do botão de voltar */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            padding: 10px 20px; /* Ajuste o padding para maior conforto */
-            margin-bottom: 20px; /* Espaço abaixo do botão */
-            text-decoration: none; /* Remove o sublinhado */
-            display: inline-block; /* Permite que o botão seja um bloco */
+            width: auto; /* Largura automática para o botão de voltar */
+            padding: 10px; /* Tamanho reduzido */
+            background-color: #6827a5e1; /* Cor do botão de voltar */
+            color: white; /* Cor do texto */
+            border: none; /* Sem borda */
+            border-radius: 4px; /* Bordas arredondadas */
+            cursor: pointer; /* Cursor de mão */
+            display: block; /* Exibir como bloco para centralização */
+            margin: 0 auto 20px auto; /* Margem inferior */
         }
         .back-button:hover {
-            background-color: #218838; /* Cor do botão de voltar ao passar o mouse */
+            background-color: #5300a1e1; /* Cor do botão ao passar o mouse */
+        }
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
         }
     </style>
 </head>
 <body>
-    <a href="/main" class="back-button">Voltar para o Início</a> <!-- Botão de voltar no topo -->
+    <button class="back-button" onclick="location.href='{{ url_for('main') }}'">Voltar para o Início</button> <!-- Botão de Voltar -->
     <div class="container">
-        <h1>Baixar Vídeos do YouTube</h1>
-        <p>Baixe qualquer vídeo do YouTube.</p>
-        <form id="download-form" action="/youtube2/download_video" method="post" onsubmit="startDownload(event)">
-            <input type="text" id="url" name="url" placeholder="Cole o link do YouTube aqui" required>
-            <select id="format" name="format">
-                <option value="bestvideo+bestaudio/best">MP4 (Melhor Qualidade)</option>
-                <option value="best">Qualidade Boa</option>
-                <option value="worst">Qualidade Não tão boa</option>
-            </select>
-            <button type="submit">Baixar</button>
-        </form>
-        <div id="progress-container">
-            <div id="progress-bar"></div>
-            <div id="progress-text">0%</div>
-        </div>
-        <div id="status-message" class="message"></div>
+        <h1>Baixe Vídeos do YouTube</h1>
+        <input type="text" id="url" placeholder="Cole a URL do vídeo aqui">
+        <button id="download-btn">Baixar Vídeo</button>
+        <div class="message" id="status-message" style="display:none;"></div>
     </div>
 
     <script>
-        function startDownload(event) {
-            event.preventDefault();
+        document.getElementById('download-btn').addEventListener('click', function() {
             const url = document.getElementById('url').value;
-            const format = document.getElementById('format').value; // Obtém o formato selecionado
             const statusMessage = document.getElementById('status-message');
-            const progressContainer = document.getElementById('progress-container');
-            const progressBar = document.getElementById('progress-bar');
-            const progressText = document.getElementById('progress-text');
 
-            statusMessage.innerText = "Iniciando download...";
-            progressContainer.style.display = 'block';
+            // Mostrar a mensagem de status
+            statusMessage.textContent = 'Baixando o Vídeo. Aguarde...';
+            statusMessage.style.display = 'block';
 
+            // Usar fetch para fazer a requisição
             fetch('/youtube2/download_video', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: new URLSearchParams({ url: url, format: format }) // Envia o formato selecionado
+                body: new URLSearchParams({ url: url })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    checkProgress();
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();  // Obter o blob da resposta
                 } else {
-                    statusMessage.innerText = data.message;
-                    progressContainer.style.display = 'none';
+                    return response.text().then(text => { throw new Error(text); });
                 }
+            })
+            .then(blob => {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);  // Criar o objeto URL a partir do blob
+                link.download = 'video.mp4'; // Nome padrão do arquivo
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+
+                // Remover a mensagem de status após o download
+                statusMessage.textContent = '';
+                statusMessage.style.display = 'none';
             })
             .catch(error => {
                 console.error('Erro:', error);
-                statusMessage.innerText = 'Erro ao iniciar o download.';
-                progressContainer.style.display = 'none';
+                alert('Erro ao baixar o vídeo: ' + error.message);
+
+                // Remover a mensagem de status em caso de erro
+                statusMessage.textContent = '';
+                statusMessage.style.display = 'none';
             });
-        }
-
-        function checkProgress() {
-            const progressContainer = document.getElementById('progress-container');
-            const progressBar = document.getElementById('progress-bar');
-            const progressText = document.getElementById('progress-text');
-            const statusMessage = document.getElementById('status-message');
-
-            fetch('/youtube2/progress')
-            .then(response => response.json())
-            .then(data => {
-                const progress = data.progress;
-                progressBar.style.width = progress + '%';
-                progressText.innerText = Math.round(progress) + '%';
-
-                if (progress < 100) {
-                    setTimeout(checkProgress, 1000);
-                } else {
-                    statusMessage.innerText = "Download concluído!";
-                }
-            })
-            .catch(error => {
-                console.error('Erro:', error);
-                statusMessage.innerText = 'Erro ao verificar progresso.';
-            });
-        }
+        });
     </script>
 </body>
 </html>
